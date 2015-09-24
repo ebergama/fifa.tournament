@@ -1,4 +1,4 @@
-var Match = require("../model/schemas").Match;
+var Match = require("../model/schemas/MatchSchema").Match;
 var ObjectId = require("../model/schemas").ObjectId;
 
 var __getObjectId = function(id) {

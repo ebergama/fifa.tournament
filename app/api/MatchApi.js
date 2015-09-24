@@ -15,7 +15,7 @@ module.exports = function(app) {
                 body.tournament = tournament._id;
                 matchService.save(body, function (err, match) {
                     apiHandler.handleResponse(req, res, next, err, function () {
-                        stats.updateForPlayer([match.home.player, match.home.partner, match.away.player, match.away.partner]);
+                        stats.updateForPlayer(match.allPlayers);
                         ranking.calculateGeneralRanking(function () {
                             email.sendMatchEmail(match);
                             apiHandler.handleResponse(req, res, next, err, "created");
@@ -27,14 +27,15 @@ module.exports = function(app) {
     });
     app.put("/api/match/", apiHandler.authenticateAdmin, function(req, res, next) {
         var body = req.body;
-                matchService.update(body._id, body, function(err, result) {
-                    apiHandler.handleResponse(req, res, next, err, function() {
-                        stats.updateForPlayer([body.home.player, body.home.partner, body.away.player, body.away.partner]);
-                        ranking.calculateGeneralRanking(function() {
-                            apiHandler.handleResponse(req, res, next, err, result);
-                        });
-                    });
+        matchService.update(body._id, body, function(err, result) {
+            apiHandler.handleResponse(req, res, next, err, function() {
+                //FIXME result is not a match?
+                stats.updateForPlayer([body.home.player, body.home.partner, body.away.player, body.away.partner]);
+                ranking.calculateGeneralRanking(function() {
+                    apiHandler.handleResponse(req, res, next, err, result);
                 });
+            });
+        });
     });
     app.get("/api/match/tournament/:tournament", function(req, res, next) {
         var tournamentName = req.params.tournament;

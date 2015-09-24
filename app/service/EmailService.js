@@ -1,6 +1,6 @@
 var nodemailer = require('nodemailer');
 var _ = require("underscore");
-var constants = require("../constants");
+var __ = require("../constants");
 var playerService = require("../service/PlayerService");
 
 var config = {
@@ -31,19 +31,16 @@ var hasConfigAvailable = function() {
 };
 
 var findUsersForMatchEmail = function(match) {
-    var findIn = function (match, homeOrAway, alias) {
-        return (match[homeOrAway][constants.PLAYER] == alias || match[homeOrAway][constants.PARTNER] == alias);
-    };
-    var getPlayersFor = function(match, homeOrAway) {
-        return [match[homeOrAway][constants.PLAYER], match[homeOrAway][constants.PARTNER]]
+    var findIn = function (players, alias) {
+        return players.indexOf(alias) != -1;
     };
     var createdByAlias = match.createdBy;
-    var homePlayers = getPlayersFor(match, constants.HOME);
-    var awayPlayers = getPlayersFor(match, constants.AWAY);
+    var homePlayers = match.homeArray;
+    var awayPlayers = match.awayArray;
 
-    if (findIn(match, constants.HOME, createdByAlias)) {
+    if (findIn(homePlayers, createdByAlias)) {
         return awayPlayers;
-    } else if (findIn(match, constants.AWAY, createdByAlias)) {
+    } else if (findIn(awayPlayers, createdByAlias)) {
         return homePlayers;
     } else {
         return _.union(homePlayers, awayPlayers);
@@ -52,8 +49,8 @@ var findUsersForMatchEmail = function(match) {
 
 var formatTeam = function(match, homeOrAway) {
     var team = match[homeOrAway];
-    var player = team[constants.PLAYER];
-    var partner = team[constants.PARTNER];
+    var player = team[__.PLAYER];
+    var partner = team[__.PARTNER];
     var suffix = '';
     if (partner) {
         suffix = " & " + partner;
@@ -70,10 +67,10 @@ var sendMatchEmail = function(match, tournamentName) {
     var body = "Match highlights: \n\n" +
             "Tournament: " + tournamentName + ", Phase: " + match.phase + "\n\n" +
             "Home Team: \n" +
-            formatTeam(match, constants.HOME) + "\n" +
+            formatTeam(match, __.HOME) + "\n" +
             "----\n" +
             "Away Team: \n" +
-            formatTeam(match, constants.AWAY) + "\n\n" +
+            formatTeam(match, __.AWAY) + "\n\n" +
         "Cheers, The Fifa Medallia Team\n " + (process.env.HEROKU_URL) ;
     var aliases = findUsersForMatchEmail(match);
     var condition = {"$or": []};

@@ -16,31 +16,6 @@ var playerSchema = new Schema({
     admin: {type: Boolean, default: false}
 });
 
-var matchSchema = new Schema({
-    date: Date,
-    createdBy: {type: String, required: false},
-    home: {
-        player: {type: String, required: true},
-        partner: {type: String, required: false},
-        goals: {type: Number, default: -1},
-        penalties: {type: Number, default: 0},
-        redCards: {type: Number, default: -1},
-        yellowCards: {type: Number, default: -1},
-        team: String
-    },
-    away: {
-        player: {type: String, required: true},
-        partner: {type: String, required: false},
-        goals: {type: Number, default: -1},
-        penalties: {type: Number, default: 0},
-        redCards: {type: Number, default: -1},
-        yellowCards: {type: Number, default: -1},
-        team: String
-    },
-    tournament: {type: Schema.Types.ObjectId, ref: "Tournament"},
-    phase: {type: String, required: true}
-});
-
 var tournamentSchema = new Schema({
     name: {type: String, required: true},
     creationDate: { type: Date, default: Date.now },
@@ -57,7 +32,6 @@ var tournamentSchema = new Schema({
 });
 
 exports.Player = mongoose.model("Player", playerSchema);
-exports.Match = mongoose.model("Match", matchSchema);
 exports.Tournament = mongoose.model("Tournament", tournamentSchema);
 exports.ObjectId = mongoose.Types.ObjectId;
 

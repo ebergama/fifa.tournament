@@ -2,6 +2,7 @@ var glicko2 = require("glicko2");
 var _ = require("underscore");
 var matchService = require("../service/MatchService");
 var playerService = require("../service/PlayerService");
+var __ = require("../constants");
 
 /**
  * A tuple is a Json object which contains glicko and model keys for glicko players and db players respectively.
@@ -48,9 +49,9 @@ var __getPlayer = function(playersTuple, alias) {
 
 var __buildGlickoMatch = function(playersTuple, match) {
     return [
-        __getPlayer(playersTuple, match.home.player), __getPlayer(playersTuple, match.home.partner),
-        __getPlayer(playersTuple, match.away.player), __getPlayer(playersTuple, match.away.partner),
-        match.home.goals > match.away.goals ? 1 : match.home.goals < match.away.goals ? 0 : 0.5
+        __getPlayer(playersTuple, match[__.HOME].player), __getPlayer(playersTuple, match[__.HOME].partner),
+        __getPlayer(playersTuple, match[__.AWAY].player), __getPlayer(playersTuple, match[__.AWAY].partner),
+        match.homeWon ? 1 : match.homeLost ? 0 : 0.5
     ];
 };
 
@@ -131,9 +132,9 @@ var calculateGeneralRanking = function(callback) {
             var playersTuple = __initPlayersTuple(players);
             matchService.getPlayedMatches(function(err, matches) {
                 _.each(matches, function(match) {
-                    var homePlayer = match.home.player, homePartner = match.home.partner;
+                    var homePlayer = match[__.HOME].player, homePartner = match[__.HOME].partner;
                     console.log("team 1 : " + homePlayer + " " + homePartner);
-                    var awayPlayer = match.away.player, awayPartner = match.away.partner;
+                    var awayPlayer = match[__.AWAY].player, awayPartner = match[__.AWAY].partner;
                     console.log("team 2 : " + awayPlayer + " " + awayPartner);
                     ranking.updateRatings(__buildGlickoMatch(playersTuple, match));
                     _.each([playersTuple[homePlayer], playersTuple[homePartner], playersTuple[awayPlayer], playersTuple[awayPartner]], function (tuple) {
