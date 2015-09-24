@@ -48,19 +48,28 @@ var __getPlayer = function(playersTuple, alias) {
 };
 
 var __buildGlickoMatch = function(playersTuple, match) {
-    return [
-        __getPlayer(playersTuple, match[__.HOME].player), __getPlayer(playersTuple, match[__.HOME].partner),
-        __getPlayer(playersTuple, match[__.AWAY].player), __getPlayer(playersTuple, match[__.AWAY].partner),
-        match.homeWon ? 1 : match.homeLost ? 0 : 0.5
-    ];
+    var homePlayers = match.getPlayers(__.HOME);
+    var awayPlayers = match.getPlayers(__.AWAY);
+    return {
+        home: {
+            player: __getPlayer(playersTuple, homePlayers[0]),
+            partner: __getPlayer(playersTuple, homePlayers[1])
+        },
+        away: {
+            player: __getPlayer(playersTuple, awayPlayers[0]),
+            partner: __getPlayer(playersTuple, awayPlayers[1])
+        },
+        matchResult: match.hasWon(__.HOME) ? 1 : match.hasLost(__.HOME) ? 0 : 0.5
+    };
+        
 };
 
 /**
- * Overriding the glicko2 updateRatings method, basically is a copy with some extra functionality that 
- * fits better for 2 vs 2 matches 
- * @param match
+ * Overriding the glicko2 updateRatings method, basically is a copy with some extra functionality that
+ * fits better for 2 vs 2 matches
+ * @param glickoMatch
  */
-glicko2.Glicko2.prototype.updateRatings = function(match){
+glicko2.Glicko2.prototype.updateRatings = function(glickoMatch){
     var initialPlayersLength = this.players.length;
     var avg = function(val1, val2) {
         return (val1 + val2)/2;
@@ -68,8 +77,11 @@ glicko2.Glicko2.prototype.updateRatings = function(match){
     //clean matches...
     this.cleanPreviousMatches();
     //obtain players...
-    var homePlayer = match[0], homePartner = match[1], awayPlayer = match[2], awayPartner = match[3];
-    var matchResult = match[4];
+    var homePlayer = glickoMatch[__.HOME].player;
+    var homePartner = glickoMatch[__.HOME].partner; 
+    var awayPlayer = glickoMatch[__.AWAY].player;
+    var awayPartner = glickoMatch[__.AWAY].partner;
+    var matchResult = glickoMatch.matchResult;
     var virtualHomePlayer, virtualAwayPlayer;
     // single player or multiplayer?
     if (!homePartner && !awayPartner) {
@@ -132,20 +144,15 @@ var calculateGeneralRanking = function(callback) {
             var playersTuple = __initPlayersTuple(players);
             matchService.getPlayedMatches(function(err, matches) {
                 _.each(matches, function(match) {
-                    var homePlayer = match[__.HOME].player, homePartner = match[__.HOME].partner;
-                    console.log("team 1 : " + homePlayer + " " + homePartner);
-                    var awayPlayer = match[__.AWAY].player, awayPartner = match[__.AWAY].partner;
-                    console.log("team 2 : " + awayPlayer + " " + awayPartner);
                     ranking.updateRatings(__buildGlickoMatch(playersTuple, match));
-                    _.each([playersTuple[homePlayer], playersTuple[homePartner], playersTuple[awayPlayer], playersTuple[awayPartner]], function (tuple) {
+                    _.each(match.getAllPlayers(), function (alias) {
+                        var tuple = playersTuple[alias];
                         if (tuple) {
-                            var player = tuple.glicko;
-                            var model = tuple.model;
-                            var rankingHistory = model.rankingHistory;
-                            var newRanking = player.getRating().toFixed(2);
+                            var rankingHistory = tuple.model.rankingHistory;
+                            var newRanking = tuple.glicko.getRating().toFixed(2);
                             var lastRanking = rankingHistory[rankingHistory.length-1];
                             lastRanking = lastRanking == null ? null : lastRanking.ranking;
-                            console.log(model.alias + ": " + lastRanking + " > " + newRanking);
+                            console.log(alias + ": " + lastRanking + " > " + newRanking);
                             if (newRanking != lastRanking) {
                                 rankingHistory.push({
                                     date: match.date,
