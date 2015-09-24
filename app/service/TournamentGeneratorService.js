@@ -1,6 +1,6 @@
 var service = require("../service/TournamentService");
 var _ = require("underscore");
-var cons = require("../constants");
+var __ = require("../constants");
 var matchService = require("./MatchService");
 
 var createMatchFromCSV = function(matchesCSV) {
@@ -13,7 +13,6 @@ var createMatchFromArray = function(matchesArray) {
         if (matchArray.length != 11) {
             throw new Error("invalid array length");
         }
-        //FIXME: replace by a match template
         var match = {"home": {}, "away": {}};
         match.home.player = matchArray[0];
         match.home.partner = matchArray[1];
@@ -51,7 +50,6 @@ var generateMatches = function(model, secondRound) {
                 var matches = [];
                 for (var i = length-1; i >= 0; i--) {
                     for (var j = 1; j < i+1; j++) {
-                        //FIXME: replace by a match template
                         var match = {"home": {}, "away": {}};
                         match.tournament = tournament._id;
                         match.phase = group.name;
@@ -69,9 +67,9 @@ var generateMatches = function(model, secondRound) {
                     saveMatch(match);
                 })
             };
-            createMatches(cons.HOME, cons.AWAY);
+            createMatches(__.HOME, __.AWAY);
             if (secondRound) {
-                createMatches( cons.AWAY, cons.HOME);
+                createMatches( __.AWAY, __.HOME);
             }
         });
     })

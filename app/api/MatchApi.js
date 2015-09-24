@@ -15,7 +15,7 @@ module.exports = function(app) {
                 body.tournament = tournament._id;
                 matchService.save(body, function (err, match) {
                     apiHandler.handleResponse(req, res, next, err, function () {
-                        stats.updateForPlayer(match.allPlayers);
+                        stats.updateForPlayer(match.getAllPlayers());
                         ranking.calculateGeneralRanking(function () {
                             email.sendMatchEmail(match);
                             apiHandler.handleResponse(req, res, next, err, "created");
