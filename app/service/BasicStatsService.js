@@ -79,19 +79,19 @@ var __collectBasicStat = function(match, playerFilter) {
         _.each(players, function(player) {
             if (playerFilter(player) && player) {
                 __verify(player);
-                var won = type == __.HOME ? match.homeWon : match.homeLost;
-                var lost = type == __.HOME ? match.homeLost : match.homeWon;
-                __addPlayerMatch(player, won, lost, match.homeTied);
-                var inverse = (type == __.HOME ? __.AWAY : __.HOME);
-                __addPlayerGoals(player, match[type].goals, match[inverse].goals);
-                __addPlayerCards(player, match[type].yellowCards, "yellow");
-                __addPlayerCards(player, match[type].redCards, "red");
+                var won = match.hasWon(type);
+                var lost = match.hasLost(type);
+                var tied = match.hasTied(type);
+                __addPlayerMatch(player, won, lost, tied);
+                __addPlayerGoals(player, match.getGoals(type), match.getGoals(match.inverse(type)));
+                __addPlayerCards(player, match.getYellowCards(type), "yellow");
+                __addPlayerCards(player, match.getRedCards(type), "red");
             }
         });
     };
     
-    collectForTeam(match.homeArray, __.HOME);
-    collectForTeam(match.awayArray, __.AWAY);
+    collectForTeam(match.getPlayers(__.HOME), __.HOME);
+    collectForTeam(match.getPlayers(__.AWAY), __.AWAY);
 };
 
 // initialize
