@@ -34,9 +34,9 @@ var findUsersForMatchEmail = function(match) {
     var findIn = function (players, alias) {
         return players.indexOf(alias) != -1;
     };
-    var createdByAlias = match.createdBy;
-    var homePlayers = match.homeArray;
-    var awayPlayers = match.awayArray;
+    var createdByAlias = match.getCreatedBy();
+    var homePlayers = match.getPlayers(__.HOME);
+    var awayPlayers = match.getPlayers(__.AWAY);
 
     if (findIn(homePlayers, createdByAlias)) {
         return awayPlayers;
@@ -48,24 +48,24 @@ var findUsersForMatchEmail = function(match) {
 };
 
 var formatTeam = function(match, homeOrAway) {
-    var team = match[homeOrAway];
-    var player = team[__.PLAYER];
-    var partner = team[__.PARTNER];
+    var players = match.getPlayers(homeOrAway);
+    var player = players[0];
+    var partner = players[1];
     var suffix = '';
     if (partner) {
         suffix = " & " + partner;
     }
     return "\t" + player + suffix + 
-        "\n\tGoals: "+ team.goals + ", Yellow cards: " + team.yellowCards + ", Red cards: " + team.redCards; 
+        "\n\tGoals: "+ match.getGoals(homeOrAway) + ", Yellow cards: " + match.getYellowCards(homeOrAway) + ", Red cards: " + match.getRedCards(homeOrAway);
 };
 
 var sendMatchEmail = function(match, tournamentName) {
     if (!hasConfigAvailable()) {
         return;
     }
-    var creator = match.createdBy;
+    var creator = match.getCreatedBy();
     var body = "Match highlights: \n\n" +
-            "Tournament: " + tournamentName + ", Phase: " + match.phase + "\n\n" +
+            "Tournament: " + tournamentName + ", Phase: " + match.getPhase() + "\n\n" +
             "Home Team: \n" +
             formatTeam(match, __.HOME) + "\n" +
             "----\n" +

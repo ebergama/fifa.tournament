@@ -65,6 +65,10 @@ Match.prototype.inverse = function(type) {
     }
 };
 
+Match.prototype.getCreatedBy = function() { return this.createdBy; };
+
+Match.prototype.getPhase = function() { return this.phase };
+
 Match.prototype.getPlayers = function(type) {
     return [this[type].player, this[type].partner];
 };
@@ -85,17 +89,10 @@ Match.prototype.hasLost = function() {
     return this[type].goals < this[this.inverse(type)].type;
 };
 
-Match.prototype.getGoals = function(type) {
-    return this[type].goals;
-};
+Match.prototype.getGoals = function(type) { return this[type].goals; };
 
-Match.prototype.getYellowCards = function(type) {
-    return this[type].yellowCards;
-};
+Match.prototype.getYellowCards = function(type) { return this[type].yellowCards; };
 
-Match.prototype.getRedCards = function(type) {
-    return this[type].redCards;
-};
-
+Match.prototype.getRedCards = function(type) { return this[type].redCards; };
 
 exports.Match = match;
