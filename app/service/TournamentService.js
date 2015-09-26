@@ -1,4 +1,4 @@
-var Tournament = require("../model/schemas").Tournament;
+var Tournament = require("../model/schemas/TournamentSchema").Tournament;
 
 var getTournaments = function(callback, sortOrder) {
     Tournament.find({}).sort({creationDate: sortOrder}).exec(callback);

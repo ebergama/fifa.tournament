@@ -70,3 +70,4 @@ Match.prototype.getYellowCards = function(type) { return this[type].yellowCards;
 Match.prototype.getRedCards = function(type) { return this[type].redCards; };
 
 exports.Match = Match;
+exports.ObjectId = mongoose.Types.ObjectId;

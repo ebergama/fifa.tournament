@@ -1,5 +1,5 @@
 var Match = require("../model/schemas/MatchSchema").Match;
-var ObjectId = require("../model/schemas").ObjectId;
+var ObjectId = require("../model/schemas/MatchSchema").ObjectId;
 
 var __getObjectId = function(id) {
     if (typeof id !== ObjectId) {

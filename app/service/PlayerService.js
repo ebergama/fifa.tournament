@@ -1,5 +1,5 @@
-var Player = require("../model/schemas").Player;
-var ObjectId = require("../model/schemas").ObjectId;
+var Player = require("../model/schemas/PlayerSchema").Player;
+var ObjectId = require("../model/schemas/PlayerSchema").ObjectId;
 var __ = require("../constants");
 
 var __get = function(condition, callback) {

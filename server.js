@@ -1,7 +1,12 @@
 // server.js
 
 // set up ========================
-require('newrelic');
+if (process.env.NEW_RELIC_LICENSE_KEY) {
+    require('newrelic');
+} else {
+    console.warn("[WARN] Newrelic not enabled");
+}
+
 var express  = require('express');
 var app      = express();                               // create our app w/ express
 var mongoose = require('mongoose');                     // mongoose for mongodb
@@ -19,10 +24,6 @@ env(__dirname + "/" + (process.env.ENV_FILE || '/env.config'));
 app.use(cookieSession({
     keys: ['key1', 'key2']
 }));
-
-if (!process.env.NEW_RELIC_LICENSE_KEY) {
-    console.warn("[WARN] Newrelic not enabled");
-}
 
 // Passport session setup.
 //   To support persistent login sessions, Passport needs to be able to
