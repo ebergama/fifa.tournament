@@ -151,7 +151,7 @@ controllers.controller('tournamentController', ['$scope', 'Data', "playersData",
     };
     
     $scope.orderByDateFn = function(match) {
-        return match.date instanceof Date ? match.date.toISOString() : match.date;
+        return (match.date instanceof Date ? match.date.toISOString() : match.date);
     };
 
     $scope.generateRandomTeams = function() {
@@ -175,6 +175,7 @@ controllers.controller('tournamentController', ['$scope', 'Data', "playersData",
     if (tournament && tournament.config.defaultPhase) {
         selectPhase(tournament.config.defaultPhase);
     }
+    $scope.sortReverse = -1;
     $(".navbar-collapse").collapse('hide');
 }])
     .filter('matchFilter', function() {

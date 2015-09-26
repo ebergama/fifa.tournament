@@ -25,7 +25,7 @@
             <a  ng-click="removePlayerTag(player)" class="filterLabel label label-primary" href="#" role="button" > {{player}} X </a>
         </div>
         <h3>{{thePhase}}</h3>
-        <h4>Partidos</h4>
+        <h4>{{thePhase == 'Partidos' ? '' : 'Partidos'}}</h4>
 
         <% if (user) { %>
         <div ng-controller="modalController"> <button type="button" class="btn btn-success" ng-click="open({'tournament': theTournament, 'phase': thePhase})">Cargar partido<i class=""></i></button></div>
@@ -34,6 +34,14 @@
             <table class="table middleData text-center">
             <thead>
             <tr>
+				<th>
+					<span class="pointer noselect" ng-click="sortReverse = !sortReverse">
+						<span>Dia</span>
+						<span ng-show="!sortReverse" class="fa fa-caret-down"></span>
+						<span ng-show="sortReverse" class="fa fa-caret-up"></span>
+					</span>
+
+				</th>
                 <th class="hidden-xs">Jugadores</th>
                 <th class="hidden-lg">J</th>
                 <th class="hidden-xs">Equipo</th>
@@ -43,17 +51,19 @@
                 <th class="hidden-xs">Equipo</th>
                 <th class="hidden-xs">Jugadores</th>
                 <th class="hidden-lg">J</th>
-                <th class="hidden-xs">Dia</th>
 
                 <!--th>Tags</th-->
             </tr>
             </thead>
-                <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters | orderBy:orderByDateFn)">
+                <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters | orderBy:orderByDateFn:sortReverse)">
 
                 <tr ng-class="match.clazz">
+					<td rowspan="2" class="col-md-1"> <!--Dia-->
+						{{match.date | date:'dd-MM-yy'}}
+					</td>
                     <td ng-class="match.home.clazz"> <!--Jugador-->
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.home.player)}}" ng-click="addPlayerTag(match.home.player)">
-                        <span class="">{{match.home.player}}</span>
+                        <span class="hidden-xs">{{match.home.player}}</span>
                     </td>
                     <td rowspan="2" ng-class="match.home.clazz" class="hidden-xs col-md-1"> <!--Equipo-->
                         <div class="team {{match.home.team}}"></div>
@@ -72,10 +82,7 @@
                     </td>
                     <td ng-class="match.away.clazz"> <!--Jugador-->
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.away.player)}}" ng-click="addPlayerTag(match.away.player)">
-                        <span class="">{{match.away.player}}</span>
-                    </td>
-                    <td rowspan="2" class="col-md-1 hidden-xs"> <!--Dia-->
-                        {{match.date | date:'dd-MM'}}
+                        <span class="hidden-xs">{{match.away.player}}</span>
                     </td>
                     <% if (user && user.admin) { %>
                     <td rowspan="2" class="col-md-1" ng-controller="modalController" style="border-top: 0px; background-color: #ffffff!important;"><button type="button" class="btn btn-circle btn-success" ng-click="open(match)"><i class="fa fa-fw fa-edit"></i></button></td>
@@ -84,11 +91,11 @@
                 <tr ng-class="match.clazz">
                     <td ng-class="match.home.clazz" ng-show="getPicture(match.home.partner)"> <!--Pareja-->
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.home.partner)}}" ng-click="addPlayerTag(match.home.partner)">
-                        <span class="">{{match.home.partner}}</span>
+                        <span class="hidden-xs">{{match.home.partner}}</span>
                     </td>
                     <td ng-class="match.away.clazz" ng-show="getPicture(match.away.partner)">    <!--Pareja-->
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.away.partner)}}" ng-click="addPlayerTag(match.away.partner)"  >
-                        <span class="">{{match.away.partner}}</span>
+                        <span class="hidden-xs">{{match.away.partner}}</span>
                     </td>
                 </tr>
                 <tr ng-hide="filteredMatches.length"><td colspan="8">Nada por aqui!</td></tr>
