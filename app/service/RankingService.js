@@ -4,6 +4,7 @@ var matchService = require("../service/MatchService");
 var playerService = require("../service/PlayerService");
 var __ = require("../constants");
 
+var playersTuple = {};
 /**
  * A tuple is a Json object which contains glicko and model keys for glicko players and db players respectively.
  * Init the tuple, at the beginning of the ranking calculation each player will have the same ranking.  
@@ -11,12 +12,13 @@ var __ = require("../constants");
  * @private
  */
 var __initPlayersTuple = function (players) {
-    var playersTuple = {};
+    ranking.removePlayers();
     _.each(players, function (player) {
         // reset the ranking history
-        player.rankingHistory = [];
+        var glicko = ranking.makePlayer();
+        glicko.rankingHistory = [];
         playersTuple[player.alias] = {
-            glicko: ranking.makePlayer(),
+            glicko: glicko,
             model: player
         };
     });
@@ -30,6 +32,7 @@ var __updateRankingDb = function(tuple) {
         var newRankingValue = glickoPlayer.getRating().toFixed(2);
         model.previousRanking = model.ranking;
         model.ranking = newRankingValue;
+        model.rankingHistory = undefined;
         model.save();
     }
 
@@ -148,7 +151,7 @@ var calculateGeneralRanking = function(callback) {
                     _.each(match.getAllPlayers(), function (alias) {
                         var tuple = playersTuple[alias];
                         if (tuple) {
-                            var rankingHistory = tuple.model.rankingHistory;
+                            var rankingHistory = tuple.glicko.rankingHistory;
                             var newRanking = tuple.glicko.getRating().toFixed(2);
                             var lastRanking = rankingHistory[rankingHistory.length-1];
                             lastRanking = lastRanking == null ? null : lastRanking.ranking;
@@ -176,6 +179,12 @@ var calculateGeneralRanking = function(callback) {
     });
 };
 
+var getRankingHistory = function(alias) {
+    var tuple = playersTuple[alias];
+    return tuple ? tuple.glicko.rankingHistory : [];
+};
+
 module.exports = {
-    calculateGeneralRanking: calculateGeneralRanking
+    calculateGeneralRanking: calculateGeneralRanking,
+    getRankingHistory: getRankingHistory
 };

@@ -7,11 +7,16 @@ var _ = require("underscore");
 module.exports = function(app) {
     app.get("/api/player", function(req, res, next) {
         playerService.getPlayers(function(err, players) {
+            _.each(players, function(player) {
+                player.rankingHistory = rankingService.getRankingHistory(player.alias);
+            });
             apiHandler.handleResponse(req, res, next, err, players);
         });
     });
     app.get("/api/player/:alias", function(req, res, next) {
-        playerService.getByAlias(req.params.alias, function(err, player) {
+        var alias = req.params.alias;
+        playerService.getByAlias(alias, function(err, player) {
+            player.rankingHistory = rankingService.getRankingHistory(alias);
             apiHandler.handleResponse(req, res, next, err, player);
         });
     });
