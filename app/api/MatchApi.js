@@ -17,7 +17,7 @@ module.exports = function(app) {
                     apiHandler.handleResponse(req, res, next, err, function () {
                         stats.updateForPlayer(match.getAllPlayers());
                         ranking.calculateGeneralRanking(function () {
-                            email.sendMatchEmail(match);
+                            email.sendMatchEmail(match, tournamentName);
                             apiHandler.handleResponse(req, res, next, err, "created");
                         });
                     });

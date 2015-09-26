@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 var _ = require("underscore");
-var __ = require("constants");
+var __ = require("../../constants");
 
 var matchSchema = new Schema({
     date: Date,
@@ -52,15 +52,15 @@ Match.prototype.getAllPlayers = function() {
 };
 
 Match.prototype.hasWon = function(type) {
-    return this[type].goals > this[this.inverse(type)].type;
+    return this[type].goals > this[this.inverse(type)].goals;
 };
 
-Match.prototype.hasTied = function() {
-    return this[type].goals == this[this.inverse(type)].type;
+Match.prototype.hasTied = function(type) {
+    return this[type].goals == this[this.inverse(type)].goals;
 };
 
-Match.prototype.hasLost = function() {
-    return this[type].goals < this[this.inverse(type)].type;
+Match.prototype.hasLost = function(type) {
+    return this[type].goals < this[this.inverse(type)].goals;
 };
 
 Match.prototype.getGoals = function(type) { return this[type].goals; };
