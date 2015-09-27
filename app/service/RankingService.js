@@ -172,7 +172,9 @@ var calculateGeneralRanking = function(callback) {
                 _.each(playersTuple, function(tuple) {
                     __updateRankingDb(tuple);
                 });
-                callback.call(this, playersTuple);
+                if (callback) {
+                    callback.call(this, playersTuple);
+                }
             }, 'asc')
         }
 
@@ -183,6 +185,8 @@ var getRankingHistory = function(alias) {
     var tuple = playersTuple[alias];
     return tuple ? tuple.glicko.rankingHistory : [];
 };
+
+calculateGeneralRanking();
 
 module.exports = {
     calculateGeneralRanking: calculateGeneralRanking,
