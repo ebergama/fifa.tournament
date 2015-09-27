@@ -30,7 +30,20 @@
         <% if (user) { %>
         <div ng-controller="modalController"> <button type="button" class="btn btn-success" ng-click="open({'tournament': theTournament, 'phase': thePhase})">Cargar partido<i class=""></i></button></div>
         <% } %>
-        <div class="table-responsive">
+		
+		<div class="input-group custom-search-form hidden-xs" style="margin-top: 1em; width: 100%">
+			<input type="text" class="form-control" placeholder="Search for a match..." ng-model="searchMatch" ng-model-options="{debounce: 500}">
+			<span class="input-group-btn">
+				<button class="btn btn-default" type="button">
+					<i class="fa fa-search"></i>
+				</button>
+			</span>
+		</div>
+		<div class='hidden-xs' style="margin-top: 0.5em; margin-bottom: 0.5em">
+			<span class="commentText">Eze AND Santi -> within the same team</span><br>
+			<span class="commentText">Eze Santi Pasto PabloA -> within the match</span>
+		</div>
+		<div class="table-responsive">
             <table class="table middleData text-center">
             <thead>
             <tr>
@@ -55,7 +68,7 @@
                 <!--th>Tags</th-->
             </tr>
             </thead>
-                <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters | orderBy:orderByDateFn:sortReverse)">
+                <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters | searchMatchFilter:searchMatch | orderBy:orderByDateFn:sortReverse)">
 
                 <tr ng-class="match.clazz">
 					<td rowspan="2" class="col-md-1"> <!--Dia-->

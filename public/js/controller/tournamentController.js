@@ -170,6 +170,7 @@ controllers.controller('tournamentController', ['$scope', 'Data', "playersData",
     });
     $scope.matches = matches;
     $scope.filteredMatches = {};
+    $scope.searchMatch = "";
     $scope.theTournament = tournament;
     Data.setCurrentTournament(tournament);
     if (tournament && tournament.config.defaultPhase) {
@@ -200,6 +201,7 @@ controllers.controller('tournamentController', ['$scope', 'Data', "playersData",
         }
     })
     .filter('tagFilter', function() {
+        //FIXME: class handling shouldn't be here
         var setResultsClass = function(match) {
             if (match.home.goals == -1 && match.away.goals == -1) {
                 match.clazz = "notPlayed";
@@ -242,6 +244,41 @@ controllers.controller('tournamentController', ['$scope', 'Data', "playersData",
                     out.push(match);
                 }
             }
+            return out;
+        }
+    })
+    .filter('searchMatchFilter', function() {
+        return function(matches, matchFilter) {
+            var out = [];
+            if (matchFilter.length == 0) {
+                return matches;
+            }
+            var andOr= /(AND|OR|and|or)/g;
+
+            var condition = andOr.exec(matchFilter);
+            if (condition) {
+                condition = condition[0].toLowerCase();
+            }
+            var players = matchFilter.replace(andOr, "").split(/\s+/);
+            _.each(matches, function(match) {
+                var allPlayers = {
+                    'home': [match.home.player, match.home.partner],
+                    'away': [match.away.player, match.away.partner],
+                    'all': [match.home.player, match.home.partner, match.away.player, match.away.partner]
+                };
+                var intersection;
+                if (condition == 'and') {
+                    intersection = _.intersection(players, allPlayers.away);
+                    if (intersection.length == 0) {
+                        intersection = _.intersection(players, allPlayers.home);
+                    }
+                } else {
+                    intersection = _.intersection(players, allPlayers.all);
+                }
+                if (intersection.length == players.length ) {
+                    out.push(match);
+                }
+            });
             return out;
         }
     });

@@ -239,3 +239,8 @@ background-image:url(http://www.fifa.com/imgml/flags/reflected/m/por.png);
 .pointer {
     cursor:pointer;
 }
+.commentText {
+    font-style: italic;
+    color: gray;
+    
+}
