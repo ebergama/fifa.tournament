@@ -1,4 +1,4 @@
-var app = angular.module('fifa', ['ngRoute', 'ui.bootstrap', 'fifaControllers'])
+var app = angular.module('fifa', ['ngRoute', 'ui.bootstrap', 'fifaControllers', 'ngSanitize', 'ui.select'])
 
 .config(['$routeProvider', "$locationProvider",
         function($routeProvider, $locationProvider) {
