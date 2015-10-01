@@ -1,14 +1,18 @@
 // server.js
 
 // set up ========================
+
 if (process.env.NEW_RELIC_LICENSE_KEY) {
-    require('newrelic');
+    var newrelic = require('newrelic');
 } else {
     console.warn("[WARN] Newrelic not enabled");
 }
 
 var express  = require('express');
 var app      = express();                               // create our app w/ express
+if (newrelic) {
+    app.locals.newrelic = newrelic;
+}
 var mongoose = require('mongoose');                     // mongoose for mongodb
 var morgan = require('morgan');             // log requests to the console (express4)
 var bodyParser = require('body-parser');    // pull information from HTML POST (express4)
@@ -82,7 +86,7 @@ app.use(methodOverride());
 require('./app/api/PlayerApi.js')(app);
 require('./app/api/TournamentApi.js')(app);
 require('./app/api/MatchApi.js')(app);
-require('./app/api/Routes.js')(app, passport);
+require('./app/api/Routes.js')(app, passport, newrelic);
 
 // listen (start app with node server.js) ======================================
 app.set('port', (process.env.PORT));

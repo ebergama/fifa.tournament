@@ -1,6 +1,6 @@
-module.exports = function(app, passport) {
+module.exports = function(app, passport, newrelic) {
 	var index = function (req, res) {
-		res.render('index', {user: req.user});
+		res.render('index', {user: req.user, newrelic: newrelic});
     };
     app.get('/', index);
 	app.get('/templates/:name', function (req, res) {
