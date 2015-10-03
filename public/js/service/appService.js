@@ -30,7 +30,12 @@ angular.module("fifa").service("tournamentService", ["$http", function($http) {
             return $http.get("/api/player/stats/all").then(function(response) {
                 return response.data;
             });
-        }
+        };
+		this.getRankingHistory = function() {
+			return $http.get("/api/player/ranking").then(function(response) {
+				return response.data;
+			});
+		}
     }])
     .service("matchService", ["$http", function($http) {
         this.getMatches = function(tournamentName) {

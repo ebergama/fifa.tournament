@@ -1,4 +1,4 @@
-controllers.controller("rankingController", ["$scope", "$location", "$http", "Data", "players", "allPlayerStats", function($scope, $location, $http, Data, players, allPlayerStats) {
+controllers.controller("rankingController", ["$scope", "$location", "$http", "Data", "players", "allPlayerStats", "rankingHistoryMap", function($scope, $location, $http, Data, players, allPlayerStats, rankingHistoryMap) {
     Data.setCurrentTournament(undefined);
     
     $scope.updateRanking = function() {
@@ -19,7 +19,8 @@ controllers.controller("rankingController", ["$scope", "$location", "$http", "Da
         var lastRanking = player.ranking;
         var delta = 0, sumDelta = 0;
         var trend;
-        _.find(player.rankingHistory.reverse().slice(1), function(history) {
+
+        _.find(rankingHistoryMap[player.alias].rankingHistory.reverse().slice(1), function(history) {
             delta = lastRanking - history.ranking;
             if (trend !== undefined && trend !== delta > 0) {
                 return true;

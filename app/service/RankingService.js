@@ -4,7 +4,22 @@ var matchService = require("../service/MatchService");
 var playerService = require("../service/PlayerService");
 var __ = require("../constants");
 
-var playersTuple = {};
+var playersTuple;
+var settings = {
+	// tau : "Reasonable choices are between 0.3 and 1.2, though the system should
+	//       be tested to decide which value results in greatest predictive accuracy."
+	tau : 0.5,
+	// rating : default rating
+	rating : 1500,
+	//rd : Default rating deviation
+	//     small number = good confidence on the rating accuracy
+	rd : 10,
+	//vol : Default volatility (expected fluctation on the player rating)
+	vol : 0.6
+};
+
+var ranking = new glicko2.Glicko2(settings);
+
 /**
  * A tuple is a Json object which contains glicko and model keys for glicko players and db players respectively.
  * Init the tuple, at the beginning of the ranking calculation each player will have the same ranking.  
@@ -12,14 +27,15 @@ var playersTuple = {};
  * @private
  */
 var __initPlayersTuple = function (players) {
+	playersTuple = {};
     ranking.removePlayers();
     _.each(players, function (player) {
         // reset the ranking history
         var glicko = ranking.makePlayer();
-        glicko.rankingHistory = [];
         playersTuple[player.alias] = {
             glicko: glicko,
-            model: player
+            model: player,
+			rankingHistory: []
         };
     });
     return playersTuple;
@@ -34,6 +50,9 @@ var __updateRankingDb = function(tuple) {
         model.ranking = newRankingValue;
         model.rankingHistory = undefined;
         model.save();
+		delete tuple.model;
+		delete tuple.glicko;
+		ranking.removePlayers();
     }
 
 };
@@ -118,20 +137,6 @@ glicko2.Glicko2.prototype.updateRatings = function(glickoMatch){
     }
 };
 
-var settings = {
-    // tau : "Reasonable choices are between 0.3 and 1.2, though the system should
-    //       be tested to decide which value results in greatest predictive accuracy."
-    tau : 0.5,
-    // rating : default rating
-    rating : 1500,
-    //rd : Default rating deviation
-    //     small number = good confidence on the rating accuracy
-    rd : 10,
-    //vol : Default volatility (expected fluctation on the player rating)
-    vol : 0.6
-};
-
-var ranking = new glicko2.Glicko2(settings);
 
 /***
  * This method should be used to perform the initial ranking calculation based on the whole match history *
@@ -151,7 +156,7 @@ var calculateGeneralRanking = function(callback) {
                     _.each(match.getAllPlayers(), function (alias) {
                         var tuple = playersTuple[alias];
                         if (tuple) {
-                            var rankingHistory = tuple.glicko.rankingHistory;
+                            var rankingHistory = tuple.rankingHistory;
                             var newRanking = tuple.glicko.getRating().toFixed(2);
                             var lastRanking = rankingHistory[rankingHistory.length-1];
                             lastRanking = lastRanking == null ? null : lastRanking.ranking;
@@ -183,12 +188,17 @@ var calculateGeneralRanking = function(callback) {
 
 var getRankingHistory = function(alias) {
     var tuple = playersTuple[alias];
-    return tuple ? tuple.glicko.rankingHistory : [];
+    return tuple ? tuple.rankingHistory : [];
+};
+
+var getAllRankingHistory = function() {
+	return playersTuple;
 };
 
 calculateGeneralRanking();
 
 module.exports = {
     calculateGeneralRanking: calculateGeneralRanking,
-    getRankingHistory: getRankingHistory
+    getRankingHistory: getRankingHistory,
+	getAllRankingHistory: getAllRankingHistory
 };

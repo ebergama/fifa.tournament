@@ -12,7 +12,10 @@ var app = angular.module('fifa', ['ngRoute', 'ui.bootstrap', 'fifaControllers', 
                         },
                         allPlayerStats: function(playerService) {
                             return playerService.getAllPlayerStats();
-                        }
+                        },
+						rankingHistoryMap: function(playerService) {
+							return playerService.getRankingHistory();
+						}
                     }
                 }).
                 when('/tournament/:tournamentName', {
