@@ -12,7 +12,7 @@ controllers.factory('Data', function() {
 
 });
 
-controllers.controller('mainController', ['$scope', 'tournamentService', 'Data', function($scope, tournamentService, Data) {
+controllers.controller('mainController', ['$scope', 'tournamentService', 'playerService', 'Data', function($scope, tournamentService, playersService, Data) {
 
     $scope.mainPage = function() {
         Data.setCurrentTournament(undefined);
@@ -37,5 +37,15 @@ controllers.controller('mainController', ['$scope', 'tournamentService', 'Data',
     $scope.selectPhase = function(phase) {
         Data.setCurrentPhase(phase);
         $scope.thePhase = phase;
-    }
+    };
+	
+	$scope.goTo = function(player, model) {
+		window.location = "/profile/" + player.alias;
+	};
+
+	playersService.getPlayers().then(function(data) {
+		$scope.players = _.filter(data, function(player) {
+			return player.active !== false;
+		});
+	});
 }]);

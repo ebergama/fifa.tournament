@@ -103,13 +103,20 @@
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li class="sidebar-search">
-                        <div class="input-group custom-search-form">
-                            <input type="text" class="form-control" placeholder="Search..." disabled>
+						<ui-select ng-model="person.selected" theme="bootstrap" on-select="goTo($item, $model)">
+							<ui-select-match placeholder="Select or search...">{{$select.selected.alias}}</ui-select-match>
+							<ui-select-choices repeat="item in players | filter: $select.search">
+								<div ng-bind-html="item.alias | highlight: $select.search"></div>
+								<small ng-bind-html="item.email | highlight: $select.search"></small>
+							</ui-select-choices>
+						</ui-select>
+						<div class="input-group custom-search-form">
+						<!--<input type="text" class="form-control" placeholder="Search...">
                                 <span class="input-group-btn">
                                     <button class="btn btn-default" type="button">
                                         <i class="fa fa-search"></i>
                                     </button>
-                                </span>
+                                </span>-->
                         </div>
                         <!-- /input-group -->
                     </li>
@@ -188,8 +195,6 @@
 
 <!-- Countdown -->
 <script src="/bower_components/jquery.countdown/dist/jquery.countdown.js"></script>
-
-<!-- Select2 -->
 
 
 <script>
