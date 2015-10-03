@@ -68,7 +68,7 @@ ul {
 	margin-top:10px;
 }
 
-.middleData td {
+.middleData tr,th,td {
 	vertical-align:middle!important;
 }
 table tr th {
@@ -76,8 +76,13 @@ table tr th {
     text-align: center;
 }
 
-.table input {
-    width: 4em;
+.numberBox {
+    width: 5em;
+	margin-right: auto;
+	margin-left: auto;
+}
+table input {
+	text-align: center;
 }
 
 .team {

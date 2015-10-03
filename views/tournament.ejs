@@ -11,32 +11,25 @@
         </span>
     </div>
 
-    <!--<ui-select ng-model="person.selected" theme="bootstrap">
-        <ui-select-match placeholder="Select or search a person in the list...">{{$select.selected.name}}</ui-select-match>
-        <ui-select-choices repeat="player in players">
-            <div ng-bind-html="player.alias"></div>
-            <small ng-bind-html="player.alias"></small>
-        </ui-select-choices>
-    </ui-select>-->
-    
     <div class="panel-body">
-        <span style="display: inline-block;" ng-show="players.length > 0">Tags: </span>
+		<span style="display: inline-block;" ng-show="players.length > 0">Tags: </span>
         <div style="display: inline-block;" ng-repeat="player in players">
             <a  ng-click="removePlayerTag(player)" class="filterLabel label label-primary" href="#" role="button" > {{player}} X </a>
         </div>
         <h3>{{thePhase}}</h3>
         <h4>{{thePhase == 'Partidos' ? '' : 'Partidos'}}</h4>
 
-        <% if (user) { %>
-        <div ng-controller="modalController"> <button type="button" class="btn btn-success" ng-click="open({'tournament': theTournament, 'phase': thePhase})">Cargar partido<i class=""></i></button></div>
-        <% } %>
-		
+        
 		<div class="input-group custom-search-form hidden-xs" style="margin-top: 1em; width: 100%">
 			<input type="text" class="form-control" placeholder="Search for a match..." ng-model="searchMatch" ng-model-options="{debounce: 500}">
 			<span class="input-group-btn">
 				<button class="btn btn-default" type="button">
 					<i class="fa fa-search"></i>
 				</button>
+				<% if (user) { %>
+				<button ng-controller="modalController" type="button" class="btn btn-success" ng-click="open({'tournament': theTournament, 'phase': thePhase, 'away': {}, 'home': {}})">Cargar partido<i class=""></i></button>
+				<% } %>
+
 			</span>
 		</div>
 		<div class='hidden-xs' style="margin-top: 0.5em; margin-bottom: 0.5em">
@@ -98,7 +91,7 @@
                         <span class="hidden-xs">{{match.away.player}}</span>
                     </td>
                     <% if (user && user.admin) { %>
-                    <td rowspan="2" class="col-md-1" ng-controller="modalController" style="border-top: 0px; background-color: #ffffff!important;"><button type="button" class="btn btn-circle btn-success" ng-click="open(match)"><i class="fa fa-fw fa-edit"></i></button></td>
+                    <td rowspan="2" class="col-md-1" ng-controller="modalController" style="border-top: 0px; background-color: #ffffff!important;"><button type="button" class="btn btn-circle btn-success" ng-click="open(match, this)"><i class="fa fa-fw fa-edit"></i></button></td>
                     <% } %>
                 </tr>
                 <tr ng-class="match.clazz">
@@ -165,74 +158,102 @@
             <h4 class="modal-title">{{match.tournament.name}} - {{match.phase}} - {{match.date | date:'dd-MM-yyyy'}}</h4>
         </div>
         <div class="modal-body table-responsive">
-            <table class="table table-striped table-hover middleData text-center">
+			<div style="margin: 0.7em">
+				<label for="calendar">Fecha del partido: </label>
+				<input id="calendar" type="date" class="form-control" datepicker-popup="{{format}}" ng-model="match.date" is-open="opened" ng-required="true" close-text="Close" style="width: 15em;display: inline;"/>
+			</div>
+
+            <table class="table table-striped" id="matchLoad">
                 <thead>
                 <tr>
-                    <th class=""> <!--Equipo-->
-                        <select id="homeTeam" ng-model="match.home.team" init-team-select></select>
+					<th class="col-xs-3 col-md-3"> <!--Equipo Local-->
+						<ui-select ng-model="match.home.team.selected" theme="bootstrap" >
+							<ui-select-match placeholder="Select team">{{$select.selected.text}}</ui-select-match>
+							<ui-select-choices repeat="team in teams| filter: $select.search">
+								<div ng-bind-html="team.text | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
                     </th>
-                    <th>
-                        <div class="col-xs-12">
-                            <p class="input-group">
-                                <input type="date" class="form-control" datepicker-popup="{{format}}" ng-model="match.date" is-open="opened" ng-required="true" close-text="Close" />
-                            </p>
-                        </div>
-
+					<th class="col-xs-3 col-md-3"><!--Calendario-->
+						Equipos
+						
                     </th>
-                    <th class=""> <!--Equipo-->
-                        <select id="awayTeam" ng-model="match.away.team" init-team-select></select>
+					<th class="col-xs-3 col-md-3"> <!--Equipo Visitante-->
+						<ui-select ng-model="match.away.team.selected" theme="bootstrap">
+							<ui-select-match placeholder="Select team">{{$select.selected.text}}</ui-select-match>
+							<ui-select-choices repeat="team in teams| filter: $select.search">
+								<div ng-bind-html="team.text | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td> <!--Jugador-->
-                        <select id="homePlayer" ng-model="match.home.player" init-player-select ng-options="player for player in playeropts ">
-                        </select>
+						<ui-select ng-model="match.home.player.selected" theme="bootstrap">
+							<ui-select-match placeholder="Search ...">{{$select.selected.alias}}</ui-select-match>
+							<ui-select-choices repeat="player in players | filter: $select.search">
+								<div ng-bind-html="player.alias | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
                     </td>
                     <th>Jugadores</th>
                     <td> <!--Jugador-->
-                        <select id="awayPlayer" ng-model="match.away.player" init-player-select ng-options="player for player in playeropts track by player">
-                        </select>
+						<ui-select ng-model="match.away.player.selected" theme="bootstrap">
+							<ui-select-match placeholder="Search ...">{{$select.selected.alias}}</ui-select-match>
+							<ui-select-choices repeat="player in players | filter: $select.search">
+								<div ng-bind-html="player.alias | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <select id="homePartner" ng-model="match.home.partner" init-player-select ng-options="player for player in playeropts track by player">
-                        </select>
+						<ui-select ng-model="match.home.partner.selected" theme="bootstrap">
+							<ui-select-match placeholder="Search ...">{{$select.selected.alias}}</ui-select-match>
+							<ui-select-choices repeat="player in players | filter: $select.search">
+								<div ng-bind-html="player.alias | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
                     </td>
                     <th>Compañeros</th>
                     <td>
-                        <select id="awayPartner" ng-model="match.away.partner" init-player-select ng-options="player for player in playeropts track by player">
-                        </select>
-                    </td>
+						<ui-select ng-model="match.away.partner.selected" theme="bootstrap">
+							<ui-select-match placeholder="Search ...">{{$select.selected.alias}}</ui-select-match>
+							<ui-select-choices repeat="player in players | filter: $select.search">
+								<div ng-bind-html="player.alias | highlight: $select.search"></div>
+							</ui-select-choices>
+						</ui-select>
+
+					</td>
                 </tr>
                 <tr>
-                    <td><input type="number" ng-model="match.home.goals"></td>
+                    <td><input type="number" ng-model="match.home.goals" class="form-control text-center numberBox"></td>
                     <th>Goles</th>
-                    <td><input type="number" ng-model="match.away.goals"></td>
+                    <td><input type="number" ng-model="match.away.goals" class="form-control text-center numberBox"></td>
                 </tr>
                 <tr ng-show="match.away.goals == match.home.goals">
-                    <td><input type="number" ng-model="match.home.penalties"></td>
+                    <td><input type="number" ng-model="match.home.penalties" class="form-control text-center numberBox"></td>
                     <th>Penales</th>
-                    <td><input type="number" ng-model="match.away.penalties"></td>
+                    <td><input type="number" ng-model="match.away.penalties" class="form-control text-center numberBox"></td>
                 </tr>
                 <tr>
-                    <td><input type="number" ng-model="match.home.yellowCards"></td>
+                    <td><input type="number" ng-model="match.home.yellowCards" class="form-control text-center numberBox"></td>
                     <th>Amarillas</th>
-                    <td><input type="number" ng-model="match.away.yellowCards"></td>
+                    <td><input type="number" ng-model="match.away.yellowCards" class="form-control text-center numberBox"></td>
                 </tr>
                 <tr>
-                    <td><input type="number" ng-model="match.home.redCards"></td>
+                    <td><input type="number" ng-model="match.home.redCards" class="form-control text-center numberBox"></td>
                     <th>Rojas</th>
-                    <td><input type="number" ng-model="match.away.redCards"></td>
+                    <td><input type="number" ng-model="match.away.redCards" class="form-control text-center numberBox"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-default" ng-click="cancel()">Cancel</button>
         </div>
     </script>
 </div>
