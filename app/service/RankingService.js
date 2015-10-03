@@ -186,7 +186,7 @@ var getRankingHistory = function(alias) {
     return tuple ? tuple.glicko.rankingHistory : [];
 };
 
-//calculateGeneralRanking();
+calculateGeneralRanking();
 
 module.exports = {
     calculateGeneralRanking: calculateGeneralRanking,
