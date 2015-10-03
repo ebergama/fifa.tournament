@@ -16,10 +16,10 @@ module.exports = function(app) {
                 matchService.save(body, function (err, match) {
                     apiHandler.handleResponse(req, res, next, err, function () {
                         stats.updateForPlayer(match.getAllPlayers());
-                        ranking.calculateGeneralRanking(function () {
+                        //ranking.calculateGeneralRanking(function () {
                             email.sendMatchEmail(match, tournamentName);
                             apiHandler.handleResponse(req, res, next, err, "created");
-                        });
+                        //});
                     });
                 });
             });
@@ -31,9 +31,9 @@ module.exports = function(app) {
             apiHandler.handleResponse(req, res, next, err, function() {
                 //FIXME result is not a match?
                 stats.updateForPlayer([body.home.player, body.home.partner, body.away.player, body.away.partner]);
-                ranking.calculateGeneralRanking(function() {
+                //ranking.calculateGeneralRanking(function() {
                     apiHandler.handleResponse(req, res, next, err, result);
-                });
+                //});
             });
         });
     });
