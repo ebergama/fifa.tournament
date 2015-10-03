@@ -1,28 +1,106 @@
-controllers.controller('modalController', ["$scope", "$modal", "$log", "playerService", function ($scope, $modal, $log, playerService) {
+controllers.controller('modalController', ["$scope", "$modal", "$log", "playerService", "teamService", function ($scope, $modal, $log, playerService, teamService) {
 
+	$scope.today = function() {
+		$scope.dt = new Date();
+	};
+	$scope.today();
+
+	$scope.clear = function () {
+		$scope.dt = null;
+	};
+
+	// Disable weekend selection
+	$scope.disabled = function(date, mode) {
+		return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+	};
+
+	$scope.toggleMin = function() {
+		$scope.minDate = $scope.minDate ? null : new Date();
+	};
+	$scope.toggleMin();
+	$scope.maxDate = new Date(2020, 5, 22);
+
+
+	$scope.dateOptions = {
+		formatYear: 'yy',
+		startingDay: 1
+	};
+
+	$scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
+	$scope.format = $scope.formats[0];
+
+	$scope.status = {
+		opened: false
+	};
+
+	var tomorrow = new Date();
+	tomorrow.setDate(tomorrow.getDate() + 1);
+	var afterTomorrow = new Date();
+	afterTomorrow.setDate(tomorrow.getDate() + 2);
+	$scope.events =
+		[
+			{
+				date: tomorrow,
+				status: 'full'
+			},
+			{
+				date: afterTomorrow,
+				status: 'partially'
+			}
+		];
+
+	$scope.getDayClass = function(date, mode) {
+		if (mode === 'day') {
+			var dayToCheck = new Date(date).setHours(0,0,0,0);
+
+			for (var i=0;i<$scope.events.length;i++){
+				var currentDay = new Date($scope.events[i].date).setHours(0,0,0,0);
+
+				if (dayToCheck === currentDay) {
+					return $scope.events[i].status;
+				}
+			}
+		}
+
+		return '';
+	};
+	
+	
+	
+	
+	
+	
     $scope.animationsEnabled = true;
+	$scope.status = {
+		opened: false
+	};
+	
+	$scope.openCal = function($event) {
+		$scope.status.opened = true;
+	};
 
     $scope.open = function (match) {
-
+        
         var modalInstance = $modal.open({
             animation: $scope.animationsEnabled,
             templateUrl: 'resultsEditor',
             controller: 'modalInstanceController',
             resolve: {
-                match: function () {
-                    return match;
-                },
-                players: function() {
-                    return playerService.getPlayers();
-                }
+                match: function () { return match; },
+                players: function() { return playerService.getPlayers(); },
+				teams: function() { return teamService.getTeams();}
             }
         });
 
-        modalInstance.result.then(function () {
-            $scope.calculateStandings();
-            match.clazz = "";
+        modalInstance.result.then(
+			function (updatedMatch) {
+				if (!match.home.player && !match.home.player) {
+					$scope.matches.push(match);
+				}
+				angular.copy(updatedMatch, match);
+            	$scope.calculateStandings();
         }, function () {
-            $log.info('Modal dismissed at: ' + new Date());
+            	$log.info('Modal dismissed at: ' + new Date());
         });
     };
 
@@ -32,50 +110,53 @@ controllers.controller('modalController', ["$scope", "$modal", "$log", "playerSe
 
 }]);
 
-angular.module('fifa').controller('modalInstanceController', function ($scope, $modalInstance, match, players, $http) {
+angular.module('fifa').controller('modalInstanceController', function ($scope, $modalInstance, match, players, teams, $http) {
 
-    $scope.match = match;
-    if (!match.home) {
-        match.home = {};
-        match.home.goals = match.home.redCards = match.home.yellowCards = 0;
-    }
-    if (!match.away){
-        match.away = {};
-        match.away.goals = match.away.redCards = match.away.yellowCards = 0;
-    }
-    
-    
-    match.date = match.date ? new Date(match.date) : new Date();
+	//FIXME: ui-select doesn't support repeat over map yet.
+	var playersMap = _.indexBy(players, function (player) { return player.alias });
+	$scope.teams = teams;
+	var teamsMap = _.indexBy($scope.teams, function(team) { return team.cssValue });
+
+	var jsonToSelect = function(object) {
+		if (object) return {selected: object}
+		else return undefined;
+	};
+	var selectToJson = function(selectObject, key) {
+		return selectObject && selectObject.selected ? selectObject.selected[key] : undefined;
+	};
+
+	var __select2 = function(modalMatch, type) {
+		modalMatch[type].player = jsonToSelect(playersMap[match[type].player]);
+		modalMatch[type].partner = jsonToSelect(playersMap[match[type].partner]);
+		modalMatch[type].team = jsonToSelect(teamsMap[match[type].team]);
+	};
+
+	var __reverseSelect2 = function(modalMatch, type) {
+		modalMatch[type].player = selectToJson(modalMatch[type].player, "alias");
+		modalMatch[type].partner = selectToJson(modalMatch[type].partner, "alias");
+		modalMatch[type].team = selectToJson(modalMatch[type].team, "cssValue");
+	};
+
+	var modalMatch = angular.copy(match);
+	__select2(modalMatch, "home");
+	__select2(modalMatch, "away");
+	modalMatch.date = match.date ? new Date(match.date) : new Date();
 
     $scope.players = players;
-    $scope.playeropts = _.pluck(players, 'alias');
-    var playersMap = {};
-    $.each(players, function(index, player) {
-        playersMap[player.alias] = player;
-    });
-
+    $scope.match = modalMatch;
+	
     $scope.ok = function () {
-
-        //FIXME: use select2 and angular properly
-        match.home.player = $("#homePlayer").val().replace("string:","");
-        var homePartner = $("#homePartner").val().replace("string:", "");
-        match.home.partner = homePartner != '?' ? homePartner : undefined;;
-        match.away.player = $("#awayPlayer").val().replace("string:","");
-        var awayPartner = $("#awayPartner").val().replace("string:", "");
-        match.away.partner = awayPartner != '?' ? awayPartner : undefined;
-
-        match.home.team = $("#homeTeam").val();
-        match.away.team = $("#awayTeam").val();
-
-        if (match._id) {
-            $http.put("/api/match", match).success(function(response) {
-                $modalInstance.close();
+		__reverseSelect2(modalMatch, "home");
+		__reverseSelect2(modalMatch, "away");
+        if (modalMatch._id) {
+            $http.put("/api/match", modalMatch).success(function(response) {
+                $modalInstance.close(modalMatch);
             }).error(function() {
                 $modalInstance.dismiss("error")
             })
         } else {
-            $http.post("/api/match", match).success(function(response) {
-                $modalInstance.close();
+            $http.post("/api/match", modalMatch).success(function(response) {
+                $modalInstance.close(modalMatch);
             }).error(function() {
                 $modalInstance.dismiss("error")
             })
@@ -85,65 +166,4 @@ angular.module('fifa').controller('modalInstanceController', function ($scope, $
     $scope.cancel = function () {
         $modalInstance.dismiss('cancel');
     };
-}).directive('initPlayerSelect', function() {
-    return function(scope, element, attrs) {
-        // FIXME use angular properly
-        _.delay(function() { 
-            $(element).select2({placeholder: "Select a player"})
-        });
-    }
-
-}).directive('initTeamSelect', function() {
-    //FIXME: remove this directive, we should have the teams in the db
-    return function($scope, element, attrs) {
-        var data = [
-            {id: "RealMadrid", text: "Real Madrid"},
-            {id: "Barcelona", text: "Barcelona"},
-            {id: "Chelsea", text:"Chelsea"},
-            {id: "PSG", text:"PSG"},
-            {id: "Bayern", text:"Bayern Munich"},
-            {id: "Borussia", text:"Borussia Dortmund"},
-            {id: "ManUtd", text:"Manchester United"},
-            {id: "ManCity", text:"Manchester City"},
-            {id: "Juventus", text:"Juventus"},
-            {id: "Argentina", text:"Argentina"},
-            {id: "Alemania", text:"Alemania"},
-            {id: "Brasil", text:"Brasil"},
-            {id: "Espana", text:"Espana"},
-            {id: "Francia", text:"Francia"},
-            {id: "Holanda", text:"Holanda"},
-            {id: "Inglaterra", text:"Inglaterra"},
-            {id: "Italia", text:"Italia"},
-            {id: "Mexico", text:"Mexico"},
-            {id: "Uruguay", text:"Inglaterra"},
-            {id: "Colombia", text:"Colombia"},
-            {id: "CDMarfil", text:"Costa de Marfil"},
-            {id: "EEUU", text:"EEUU"},
-            {id: "Portugal", text:"Portugal"},
-            {id: "Peru", text:"Peru"},
-            {id: "Ecuador", text:"Ecuador"},
-            {id: "Chile", text:"Chile"},
-            {id: "Venezuela", text:"Venezuela"},
-            {id: "Paraguay", text:"Paraguay"},
-            {id: "Bolivia", text:"Bolivia"},
-            {id: "Gales", text:"Gales"},
-            {id: "Australia", text:"Australia"},
-            {id: "Korea", text:"Corea del sur"}
-        ];
-        $(element).select2({
-            placeholder: "Select a team",
-            data: data,
-            allowClear: true
-        });
-        var homeOrAway = $(element).attr('ng-model').split(".")[1];
-        var team = $scope.match[homeOrAway].team;
-        _.delay(function() {
-            // Don't ask why with just one doesn't work
-            $(element).select2().val(team);
-            $(element).select2().val(team);
-        });
-
-
-        
-    }
 });

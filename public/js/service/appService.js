@@ -44,4 +44,44 @@ angular.module("fifa").service("tournamentService", ["$http", function($http) {
                 return response.data;
             });
         }
+    }])
+	.service("teamService", [function() {
+		//FIXME: backend should provide these.
+        this.getTeams = function() {
+            return [
+				{cssValue: "RealMadrid", text: "Real Madrid"},
+				{cssValue: "Barcelona", text: "Barcelona"},
+				{cssValue: "Chelsea", text:"Chelsea"},
+				{cssValue: "PSG", text:"PSG"},
+				{cssValue: "Bayern", text:"Bayern Munich"},
+				{cssValue: "Borussia", text:"Borussia Dortmund"},
+				{cssValue: "ManUtd", text:"Manchester United"},
+				{cssValue: "ManCity", text:"Manchester City"},
+				{cssValue: "Juventus", text:"Juventus"},
+				{cssValue: "Argentina", text:"Argentina"},
+				{cssValue: "Alemania", text:"Alemania"},
+				{cssValue: "Brasil", text:"Brasil"},
+				{cssValue: "Espana", text:"Espana"},
+				{cssValue: "Francia", text:"Francia"},
+				{cssValue: "Holanda", text:"Holanda"},
+				{cssValue: "Inglaterra", text:"Inglaterra"},
+				{cssValue: "Italia", text:"Italia"},
+				{cssValue: "Mexico", text:"Mexico"},
+				{cssValue: "Uruguay", text:"Inglaterra"},
+				{cssValue: "Colombia", text:"Colombia"},
+				{cssValue: "CDMarfil", text:"Costa de Marfil"},
+				{cssValue: "EEUU", text:"EEUU"},
+				{cssValue: "Portugal", text:"Portugal"},
+				{cssValue: "Peru", text:"Peru"},
+				{cssValue: "Ecuador", text:"Ecuador"},
+				{cssValue: "Chile", text:"Chile"},
+				{cssValue: "Venezuela", text:"Venezuela"},
+				{cssValue: "Paraguay", text:"Paraguay"},
+				{cssValue: "Bolivia", text:"Bolivia"},
+				{cssValue: "Gales", text:"Gales"},
+				{cssValue: "Australia", text:"Australia"},
+				{cssValue: "Korea", text:"Corea del sur"}
+			];
+        }
+        
     }]);
