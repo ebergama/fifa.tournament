@@ -1,11 +1,59 @@
-<h1 class="page-header"> Estadisticas</h1>
+<h1 class="page-header" xmlns="http://www.w3.org/1999/html"> Estadisticas</h1>
 <div class="panel panel-default">
     <div class="panel-body">
+		<div class="row">
+			<form class="form-horizontal col-xs-10">
+				<div class="form-group">
+					<label for="statName" class="col-sm-2 control-label">Nombre</label>
+					<div class="col-sm-10">
+						<input type="text" ng-model="stat.name" class="form-control" id="statName" placeholder="Nombre de la estadistica">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="statDescription" class="col-sm-2 control-label">Descripcion</label>
+					<div class="col-sm-10">
+						<input type="text" ng-model="stat.description" class="form-control" id="statDescription" placeholder="Descripcion de la estadistica">
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="statFn" class="col-sm-2 control-label">Calculo</label>
+					<div class="col-sm-10">
+						<div class="input-group">
+							<input type="text" ng-model="stat.fnString" class="form-control" id="statFn" placeholder="i.e. stat.matches.played">
+							<div ng-controller="statModalController" class="input-group-addon input-group-addon-question pointer" ng-click="open()"><i class="fa fa-fw fa-question"></i></div>
+						</div>
+					</div>
+
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<div class="radio">
+							<label>
+								<input ng-model="stat.sortOrder" type="radio" name="sort" id="sortAsc" value="asc" checked>Ascendente
+							</label>
+						</div>
+						<div class="radio">
+							<label>
+								<input ng-model="stat.sortOrder" type="radio" name="sort" id="sortDesc" value="desc">Descendente
+							</label>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-success" ng-click="addStatTemplate(stat.name, stat.description, stat.fnString, stat.sortOrder)">Agregar Estadistica</button>
+					</div>
+				</div>
+			</form>
+		</div>
+
         <div class="row">
-            <div ng-repeat="stat in stats" class="col-md-4">
+            <div ng-repeat="stat in stats" class="col-md-4 panel panel-default">
+				<div class="close-window pointer" ng-click="removeStat(stat.id)">x</div>
                 <h3>{{stat.name}}</h3>
                 <h5>{{stat.description}}</h5>
-                <table  class="table table-hover table-striped text-center middleData">
+				<span class="commentText">calc: {{stat.fnString}}</span>
+                <table class="table table-hover table-striped text-center middleData">
                     <thead>
                     <tr>
                         <th class="col-xs-1">Jugador</th>
@@ -14,16 +62,49 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="item in stat.list" ng-if="$index < 10">
-                        <td class="col-xs-1">{{item.name}}</td>
+                        
+                        <td class="col-xs-1">
+							<div class="row">
+								<div class="col-xs-6">
+									<img class="img-circle img-circle-small" ng-src="{{getPicture(item.name)}}">	
+								</div>
+								<div class="col-xs-6 middleData">{{item.name}}</div>
+							</div>
+						</td>
+
                         <td class="col-xs-1">{{item.value | number:2}}</td>
                     </tr>
                     </tbody>
                 </table>
-
             </div>
             
         </div>
-
-        
     </div>
+
+	<div ng-controller="statModalController">
+		<script type="text/ng-template" id="statHelp">
+			<div class="modal-header">
+				<h3>Ayuda</h3>
+				<p class="commentText">El formato de estadistica es el que figura mas abajo, la funcion o calculo que definas se va a aplicar para cada jugador y asi, obtener su valor.</p>
+			</div>
+			<div class="modal-body table-responsive">
+				<code class="">var stat = {<br>
+					matches: {<br>
+					played: [Number],<br>
+						won: [Number],<br>
+						lost: [Number]<br>
+						tied: [Number] },<br>
+					goals: { received: [Number], scored: [Number] },<br>
+					cards: {<br>
+						red: { matches: [Number], count: [Number] },<br>
+						yellow: { matches: [Number], count: [Number] }<br>
+					}<br>
+					}
+				</code>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" ng-click="ok()">OK</button>
+			</div>
+		</script>
+	</div>
 </div>

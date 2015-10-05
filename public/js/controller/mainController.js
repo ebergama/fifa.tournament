@@ -44,8 +44,6 @@ controllers.controller('mainController', ['$scope', 'tournamentService', 'player
 	};
 
 	playersService.getPlayers().then(function(data) {
-		$scope.players = _.filter(data, function(player) {
-			return player.active !== false;
-		});
+		$scope.players = _.filter(_.sortBy(data, function(player) {return player.alias;}), function(player) {return player.active !== false;});
 	});
 }]);

@@ -11,9 +11,7 @@ body { padding-top: 2em; }
 	background-color:#ddd;
 }
 
-.points {
-	background-color:#D9D9F1;	
-}
+.points {  background-color:#D9D9F1;  }
 .won {
     background-color: #C9F2D7;
     color: green;
@@ -22,17 +20,10 @@ body { padding-top: 2em; }
     background-color: #F4BDBC;
     color: red;
 }
-.tie {
-    background-color: #fffbc0;
-}
+.tie {  background-color: #fffbc0;  }
 
-.rankPositive {
-    color: green;
-}
-
-.rankNegative {
-    color: red;
-}
+.rankPositive {  color: green;  }
+.rankNegative {  color: red;  }
 
 .notPlayed {
     opacity: 0.2;
@@ -56,7 +47,6 @@ body { padding-top: 2em; }
     vertical-align:middle!important;
 }
 
-
 .img-circle-large {
     cursor:pointer;
     height:248px;
@@ -64,8 +54,10 @@ body { padding-top: 2em; }
     vertical-align:middle!important;
 }
 
-ul {
-	margin-top:10px;
+/*FIXME: should be a better way of doing this.*/
+.nav>li>a{
+	height:4em;
+	padding: 17px 15px;
 }
 
 .middleData tr,th,td {
@@ -81,6 +73,19 @@ table tr th {
 	margin-right: auto;
 	margin-left: auto;
 }
+.input-group-addon-question {
+	background-color: #3B99FC;
+	color: white;
+}
+.close-window {
+	float: right;
+	margin-top: 0.58em;
+	color: gray;
+}
+.stat-panel {
+	margin-right: 0.2em;
+	
+}
 table input {
 	text-align: center;
 }
@@ -94,136 +99,13 @@ table input {
 	vertical-align:middle!important;
 }
 
-.Argentina {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/arg.png);
+.search-top {
+	width: 40em;
+	margin-right: 2em;
 }
-
-.Alemania {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ger.png);
-}
-
-.Brasil {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/bra.png);
-}
-
-.Espana {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/esp.png);
-}
-
-.Francia {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/fra.png);
-}
-
-.Holanda {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ned.png);
-}
-
-.Inglaterra {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/eng.png);
-}
-
-.Italia {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ita.png);
-}
-
-.Mexico {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/mex.png);
-}
-
-.Uruguay {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/uru.png);
-}
-
-.Colombia {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/col.png);
-}
-
-.CdMarfil {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/civ.png);
-}
-
-.EEUU {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/usa.png);
-}
-
-.Portugal {
-background-image:url(http://www.fifa.com/imgml/flags/reflected/m/por.png);
-}
-
-.Peru {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/per.png);
-}
-
-.Ecuador {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ecu.png);
-}
-
-.Chile {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/chi.png);
-}
-
-.Venezuela {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ven.png);
-}
-
-.Paraguay {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/par.png);
-}
-
-.Bolivia {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/bol.png);
-}
-
-.Gales {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/wal.png);
-}
-
-.Australia {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/aus.png);
-}
-
-.Korea {
-    background-image:url(http://www.fifa.com/imgml/flags/reflected/m/kor.png);
-}
-
-.Barcelona {
-    background-image:url(http://img.fifa.com/mm/teams/1903416/1903416x3.png);
-}
-
-.RealMadrid {
-    background-image:url(http://www.fifa.com/mm/teams/30504/30504x3.png);
-}
-
-.Juventus {
-    background-image:url(http://img.fifa.com/mm/teams/31085/31085x3.png);
-}
-
-.Chelsea {
-    background-image:url(http://img.fifa.com/mm/teams/1935290/1935290x3.png);
-}
-
-.ManCity {
-    background-image:url(http://img.fifa.com/mm/teams/33337/33337x3.png);
-}
-
-.ManUtd {
-    background-image:url(http://img.fifa.com/mm/teams/33161/33161x3.png);
-}
-
-.PSG {
-    background-image:url(http://img.fifa.com/mm/teams/33191/33191x3.png);
-}
-
-.Borussia{
-    background-image:url(http://img.fifa.com/mm/teams/33199/33199x3.png);
-}
-
-.Bayern {
-    background-image:url(http://img.fifa.com/mm/teams/1914810/1914810x3.png);
-}
-
-.Atletico {
-    background-image:url(http://img.fifa.com/mm/teams/1914808/1914808x3.png);
+.search-top-xs {
+	width: 17em;
+	margin-right: 1em;
 }
 .btn-google {
     color: #fff;
@@ -241,11 +123,42 @@ background-image:url(http://www.fifa.com/imgml/flags/reflected/m/por.png);
     -ms-user-select: none;
     user-select: none;
 }
-.pointer {
-    cursor:pointer;
-}
+.pointer {  cursor:pointer;  }
 .commentText {
     font-style: italic;
     color: gray;
-    
 }
+
+.Argentina {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/arg.png);  }
+.Alemania {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ger.png);  }
+.Brasil {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/bra.png);  }
+.Espana {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/esp.png);  }
+.Francia {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/fra.png);  }
+.Holanda {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ned.png);  }
+.Inglaterra {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/eng.png);  }
+.Italia {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ita.png);  }
+.Mexico {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/mex.png);  }
+.Uruguay {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/uru.png);  }
+.Colombia {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/col.png);  }
+.CdMarfil {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/civ.png);  }
+.EEUU {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/usa.png);  }
+.Portugal {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/por.png);  }
+.Peru {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/per.png);  }
+.Ecuador {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ecu.png);  }
+.Chile {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/chi.png);  }
+.Venezuela {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ven.png);  }
+.Paraguay {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/par.png);  }
+.Bolivia {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/bol.png);  }
+.Gales {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/wal.png);  }
+.Australia {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/aus.png);  }
+.Korea {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/kor.png);  }
+.Barcelona {  background-image:url(http://img.fifa.com/mm/teams/1903416/1903416x3.png);  }
+.RealMadrid {  background-image:url(http://www.fifa.com/mm/teams/30504/30504x3.png);  }
+.Juventus {  background-image:url(http://img.fifa.com/mm/teams/31085/31085x3.png);  }
+.Chelsea {  background-image:url(http://img.fifa.com/mm/teams/1935290/1935290x3.png);  }
+.ManCity {  background-image:url(http://img.fifa.com/mm/teams/33337/33337x3.png);  }
+.ManUtd {  background-image:url(http://img.fifa.com/mm/teams/33161/33161x3.png);  }
+.PSG {  background-image:url(http://img.fifa.com/mm/teams/33191/33191x3.png);  }
+.Borussia{	background-image:url(http://img.fifa.com/mm/teams/33199/33199x3.png);  }
+.Bayern {  background-image:url(http://img.fifa.com/mm/teams/1914810/1914810x3.png);  }
+.Atletico {  background-image:url(http://img.fifa.com/mm/teams/1914808/1914808x3.png);  }
