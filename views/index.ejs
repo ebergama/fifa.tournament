@@ -74,9 +74,9 @@
 			<li class="search-top hidden-xs hidden-sm">
 				<ui-select ng-model="person.selected" theme="bootstrap" on-select="goTo($item, $model)">
 					<ui-select-match placeholder="Select or search...">{{$select.selected.alias}}</ui-select-match>
-					<ui-select-choices repeat="item in players | filter: $select.search">
-						<div ng-bind-html="item.alias | highlight: $select.search"></div>
-						<small ng-bind-html="item.email | highlight: $select.search"></small>
+					<ui-select-choices group-by="'type'" repeat="item in searchItems | filter: $select.search">
+						<div ng-bind-html="item.principal | highlight: $select.search"></div>
+						<small ng-bind-html="item.secondary | highlight: $select.search"></small>
 					</ui-select-choices>
 				</ui-select>
 			</li>

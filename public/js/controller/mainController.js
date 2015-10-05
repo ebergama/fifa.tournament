@@ -13,7 +13,8 @@ controllers.factory('Data', function() {
 });
 
 controllers.controller('mainController', ['$scope', 'tournamentService', 'playerService', 'Data', function($scope, tournamentService, playersService, Data) {
-
+	$scope.searchItems = [];
+	
     $scope.mainPage = function() {
         Data.setCurrentTournament(undefined);
     };
@@ -39,11 +40,19 @@ controllers.controller('mainController', ['$scope', 'tournamentService', 'player
         $scope.thePhase = phase;
     };
 	
-	$scope.goTo = function(player, model) {
-		window.location = "/profile/" + player.alias;
+	$scope.goTo = function(item, model) {
+		window.location = item.url + '/' + item.principal;
 	};
 
 	playersService.getPlayers().then(function(data) {
-		$scope.players = _.filter(_.sortBy(data, function(player) {return player.alias;}), function(player) {return player.active !== false;});
+		$scope.searchItems = _.union($scope.searchItems, _.map(_.filter(_.sortBy(data, function(player) {return player.alias;}), function(player) {return player.active !== false;}), function(player) {
+			return {principal: player.alias, secondary: player.firstName + " " + player.lastName, type: 'Jugadores', url: '/profile'};
+		}));
+	});
+	
+	tournamentService.getTournaments().then(function(data) {
+		$scope.searchItems = _.union($scope.searchItems, _.map(data.data, function(tournament) {
+			return {principal: tournament.name, secondary: new Date(tournament.creationDate).toLocaleDateString(), type: 'Torneos', url: '/tournament'};
+		}));
 	});
 }]);
