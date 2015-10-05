@@ -21,6 +21,7 @@
     "angular-sanitize": "~1.4.7",
     "bootstrap": "~3.3.5",
     "font-awesome": "~4.3.0",
+    "highlightjs": "~8.8.0",
     "jquery": "~2.1.4",
     "jquery.countdown": "~2.0.4",
     "metisMenu": "~2.0.2",

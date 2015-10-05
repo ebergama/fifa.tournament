@@ -42,10 +42,6 @@ controllers.controller("statsController", ['$scope', 'allPlayerStats', 'playersD
 		}
 	};
 	
-    var playersMap = _.indexBy(playersData, function(player) {
-		return player.alias;
-	});
-    
     $scope.stats = [];
 	$scope.getPicture = function(alias) {
 		var player = playersMap[alias];
@@ -73,7 +69,7 @@ controllers.controller("statsController", ['$scope', 'allPlayerStats', 'playersD
 		stat.list = _.sortBy(stat.list, function (player) {
 			return player.value ? order * player.value : 0;
 		});
-		$scope.stats.push(stat);
+		$scope.stats = [stat].concat($scope.stats);
 	}
 
 	TemplateFactory.createStatTemplate("Pichichi", "Promedio de goles a favor", "stat.goals.scored / stat.matches.played");
@@ -108,7 +104,6 @@ controllers.controller('statModalController', ["$scope", "$modal", "$log", funct
 	$scope.animationsEnabled = true;
 	
 	$scope.open = function (match) {
-
 		var modalInstance = $modal.open({
 			animation: $scope.animationsEnabled,
 			templateUrl: 'statHelp',
@@ -123,6 +118,11 @@ controllers.controller('statModalController', ["$scope", "$modal", "$log", funct
 }]);
 
 controllers.controller('statModalInstanceController', function ($scope, $modalInstance) {
+	$modalInstance.rendered.then(function() {
+		$('pre code').each(function(i, block) {
+			hljs.highlightBlock(block);
+		});
+	});
 	$scope.ok = function () {
 		$modalInstance.close();
 	}

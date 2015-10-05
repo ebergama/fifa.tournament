@@ -52,7 +52,6 @@
 				<div class="close-window pointer" ng-click="removeStat(stat.id)">x</div>
                 <h3>{{stat.name}}</h3>
                 <h5>{{stat.description}}</h5>
-				<span class="commentText">calc: {{stat.fnString}}</span>
                 <table class="table table-hover table-striped text-center middleData">
                     <thead>
                     <tr>
@@ -88,19 +87,26 @@
 				<p class="commentText">El formato de estadistica es el que figura mas abajo, la funcion o calculo que definas se va a aplicar para cada jugador y asi, obtener su valor.</p>
 			</div>
 			<div class="modal-body table-responsive">
-				<code class="">var stat = {<br>
-					matches: {<br>
-					played: [Number],<br>
-						won: [Number],<br>
-						lost: [Number]<br>
-						tied: [Number] },<br>
-					goals: { received: [Number], scored: [Number] },<br>
-					cards: {<br>
-						red: { matches: [Number], count: [Number] },<br>
-						yellow: { matches: [Number], count: [Number] }<br>
-					}<br>
-					}
-				</code>
+				<pre><code>
+var stat = {
+  "matches": {
+    "played": 0,
+    "won": 0,
+    "lost": 0,
+    "tied": 0
+  },
+  "goals": {
+    "received": 0,
+    "scored": 0
+  },
+  "cards": {
+    "red": { "matches": 0, "count": 0 },
+    "yellow": { "matches": 0, "count": 0 }
+  }
+}
+//ejemplo:
+var myRedCardsAvg = stat.cards.red.count/stat.cards.red.matches;
+				</code></pre>
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-primary" ng-click="ok()">OK</button>
