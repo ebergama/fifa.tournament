@@ -39,11 +39,21 @@ var getPlayedMatches = function(callback, sort) {
     }).populate("tournament").sort({"date": sort == "desc" ? -1 : 1}).exec(callback);
 };
 
+var remove = function(id, callback) {
+	Match.remove({_id: __getObjectId(id)}, callback);
+};
+
+var getById = function(id, callback) {
+	Match.findOne({_id: __getObjectId(id)}, callback);
+};
+
 module.exports = {
     getMatches: getMatches,
     getPlayedMatches: getPlayedMatches,
     getForAlias: getForAlias,
+	getById: getById,
     getForTournament: getForTournament,
     save: save,
-    update: update
+    update: update,
+	remove: remove
 };

@@ -101,7 +101,6 @@ getAllMatches(function(matches) {
     });
 });
 
-
 module.exports = {
     playerStatistics: playerStatistics,
     allPlayerStatistics: allPlayerStatistics, 

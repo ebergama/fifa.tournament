@@ -37,6 +37,22 @@ module.exports = function(app) {
             });
         });
     });
+	app.delete("/api/match/:id", apiHandler.authenticateAdmin, function(req, res, next) {
+		var _id = req.params.id;
+		matchService.getById(_id, function(err, match) {
+			apiHandler.handleResponse(req, res, next, err, function() {
+				matchService.remove(_id, function(err, result) {
+					stats.updateForPlayer(match.getAllPlayers());
+					ranking.calculateGeneralRanking(function() {
+						apiHandler.handleResponse(req, res, next, err, result);
+					});
+				})
+				
+			})
+			
+		})
+
+	});
     app.get("/api/match/tournament/:tournament", function(req, res, next) {
         var tournamentName = req.params.tournament;
         var condition = {};

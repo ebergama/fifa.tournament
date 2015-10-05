@@ -48,7 +48,10 @@ angular.module("fifa").service("tournamentService", ["$http", function($http) {
             return $http.get("/api/match/player/" + alias).then(function(response) {
                 return response.data;
             });
-        }
+        };
+		this.deleteMatch = function(match, callback) {
+			return $http.delete("/api/match/" + match._id).then(callback);
+		}
     }])
 	.service("teamService", [function() {
 		//FIXME: backend should provide these.

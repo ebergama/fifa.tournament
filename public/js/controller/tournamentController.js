@@ -1,4 +1,4 @@
-controllers.controller('tournamentController', ['$scope', 'Data', "playersData", "matches", "tournament", function($scope, Data, playersData, matches, tournament){
+controllers.controller('tournamentController', ['$scope', 'Data', "playersData", "matches", "tournament", "matchService", function($scope, Data, playersData, matches, tournament, matchService){
 
     var addTagFilter = function(tag) {
         if ($scope.tagFilters.indexOf(tag) == -1) {
@@ -162,6 +162,20 @@ controllers.controller('tournamentController', ['$scope', 'Data', "playersData",
         // Todo get valid teams from the tournament
         $scope.randomTeams = _.sample(["Barcelona", "RealMadrid", "Juventus", "Bayern", "Borussia", "Chelsea", "ManCity", "ManUtd", "PSG"],2);
     };
+	
+	$scope.deleteMatch = function(match) {
+		if(confirm("Vas a eliminar el partido, estas seguro?")) {
+			matchService.deleteMatch(match, function(response) {
+				if (response.data.ok == 1) {
+					var index = _.findIndex($scope.matches, function (item) {
+						return item == match;
+					});
+					$scope.matches.splice(index, 1);
+				}
+			});
+
+		}
+	};
 
     //Data
     $scope.players = [];
