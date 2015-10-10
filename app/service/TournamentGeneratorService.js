@@ -39,7 +39,7 @@ var createMatchFromArray = function(matchesArray) {
 
 var generateMatches = function(model, secondRound) {
     var tournamentName = model.tournamentName;
-    service.getTournament({"name": tournamentName}, "_id", function(err, tournament) {
+    service.getTournament({"name": tournamentName}, function(err, tournament) {
         if (err) {
             console.error(err);
             return;
