@@ -180,7 +180,7 @@
 								<div ng-bind-html="team.text | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
-                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="team.text for team in teams track by team.cssValue" ng-model="match.home.team"></select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="team.text for team in teams track by team.cssValue" ng-model="match.home.team.selected"></select>
                     </th>
 					<th class="col-xs-3 col-md-3"><!--Calendario-->
 						Equipos
@@ -193,7 +193,7 @@
 								<div ng-bind-html="team.text | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
-                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="team.text for team in teams track by team.cssValue" ng-model="match.away.team"></select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="team.text for team in teams track by team.cssValue" ng-model="match.away.team.selected"></select>
                     </th>
                 </tr>
                 </thead>
@@ -206,7 +206,7 @@
 								<div ng-bind-html="player.alias | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
-                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.home.player"></select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.home.player.selected"></select>
                     </td>
                     <th>Jugadores</th>
                     <td> <!--Jugador-->
@@ -216,7 +216,7 @@
 								<div ng-bind-html="player.alias | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
-                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.away.player"></select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.away.player.selected"></select>
                     </td>
                 </tr>
                 <tr>
@@ -227,7 +227,7 @@
 								<div ng-bind-html="player.alias | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
-                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.home.partner"></select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.home.partner.selected"></select>
                     </td>
                     <th>Compañeros</th>
                     <td>
@@ -237,7 +237,7 @@
 								<div ng-bind-html="player.alias | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
-                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.away.partner"></select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.away.partner.selected"></select>
 					</td>
                 </tr>
                 <tr>
