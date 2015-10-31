@@ -128,6 +128,10 @@ table input {
     color: gray;
 }
 
+.highlightResult {
+    background-color: aliceblue;
+}
+
 .Argentina {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/arg.png);  }
 .Alemania {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/ger.png);  }
 .Brasil {  background-image:url(http://www.fifa.com/imgml/flags/reflected/m/bra.png);  }

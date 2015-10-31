@@ -13,29 +13,26 @@
                     <tr>
                         <th>Pos</th>
                         <th>Jugador</th>
-                        <th></th>
+                        <!--<th class="hidden-lg hidden-md hidden-sm">J</th>-->
+                        <th class="hidden-xs"></th>
                         <th>Ranking</th>
-                        <th>PJ</th>
-                        <th>PG %</th>
-                        <th>PE %</th>
-                        <th>PP %</th>
+                        <th class="hidden-xs">PJ</th>
+                        <th class="hidden-xs">PG %</th>
+                        <th class="hidden-xs">PE %</th>
+                        <th class="hidden-xs">PP %</th>
                         <th>Diff</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="player in players track by $index | orderBy:'-ranking'" ng-if="player.active != false" ng-click="goTo(player)" style="cursor: pointer">
                         <td>{{$index + 1}}</td>
-                        <td>
-                            <img ng-src="{{player.image}}" class="img-circle">
-                        </td>
-                        <td>
-                            <span>{{player.alias}}</span>
-                        </td>
-                        <td>{{player.ranking}}</td>
-                        <td>{{player.matchesPlayed}}</td>
-                        <td>{{player.wonAvg}}</td>
-                        <td>{{player.tiedAvg}}</td>
-                        <td>{{player.lostAvg}}</td>
+                        <td><img ng-src="{{player.image}}" class="img-circle"></td>
+                        <td class="hidden-xs"><span>{{player.alias}}</span></td>
+                        <td class="highlightResult">{{player.ranking}}</td>
+                        <td class="hidden-xs">{{player.matchesPlayed}}</td>
+                        <td class="hidden-xs">{{player.wonAvg}}</td>
+                        <td class="hidden-xs">{{player.tiedAvg}}</td>
+                        <td class="hidden-xs">{{player.lostAvg}}</td>
                         <td ng-init="diff = player.delta;" ng-class="diff >0 ? 'rankPositive' : diff < 0 ? 'rankNegative' : ''">
                             {{diff | number:2}}
 
