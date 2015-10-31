@@ -91,9 +91,13 @@
                         <span class="hidden-xs">{{match.away.player}}</span>
                     </td>
                     <% if (user && user.admin) { %>
-                    <td rowspan="2" class="col-md-1">
-						<button ng-controller="modalController" type="button" style="display: block;margin-bottom: 2px " class="btn btn-circle btn-success" ng-click="open(match, this)"><i class="fa fa-fw fa-edit"></i></button>
-						<button type="button" style="display: block" class="btn btn-circle btn-danger" ng-click="deleteMatch(match, this)"><i class="fa fa-fw fa-remove"></i></button>
+                    <td rowspan="2" class="col-md-2">
+						<a ng-controller="modalController" class="btn btn-success" href="#" ng-click="open(match, this)">
+                            <i class="fa fa-plus fa-lg"></i></a>
+                        <a ng-controller="modalController" class="btn btn-warning" href="#" ng-click="cloneMatch(match, this)">
+                            <i class="fa fa-files-o fa-lg"></i></a>
+                        <a class="btn btn-danger" href="#" ng-click="deleteMatch(match, this)">
+                            <i class="fa fa-trash-o fa-lg"></i></a>
 					</td>
                     <% } %>
                 </tr>

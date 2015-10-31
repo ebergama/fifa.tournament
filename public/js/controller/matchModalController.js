@@ -24,6 +24,14 @@ controllers.controller('modalController', ["$scope", "$modal", "$log", "playerSe
             	$log.info('Modal dismissed at: ' + new Date());
         });
     };
+    
+    $scope.cloneMatch = function(match) {
+        var clone = angular.copy(match);
+        clone._id = null;
+        clone.home.goals = clone.home.penalties = clone.home.redCards = clone.home.yellowCards = 0;
+        clone.away.goals = clone.away.penalties = clone.away.redCards = clone.away.yellowCards = 0;
+        $scope.open(clone);
+    };
 
     $scope.toggleAnimation = function () {
         $scope.animationsEnabled = !$scope.animationsEnabled;
