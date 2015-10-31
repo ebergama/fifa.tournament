@@ -14,13 +14,10 @@ module.exports = function(app) {
             apiHandler.handleResponse(req, res, next, err, function () {
                 body.tournament = tournament._id;
                 matchService.save(body, function (err, match) {
-                    apiHandler.handleResponse(req, res, next, err, function () {
-                        stats.updateForPlayer(match.getAllPlayers());
-                        ranking.calculateGeneralRanking(function () {
-                            email.sendMatchEmail(match, tournamentName);
-                            apiHandler.handleResponse(req, res, next, err, "created");
-                        });
-                    });
+                    apiHandler.handleResponse(req, res, next, err, "created");
+                    email.sendMatchEmail(match, tournamentName, true);
+                    stats.updateForPlayer(match.getAllPlayers());
+                    ranking.calculateGeneralRanking();
                 });
             });
         });
@@ -30,10 +27,10 @@ module.exports = function(app) {
         matchService.update(body._id, body, function(err, result) {
             apiHandler.handleResponse(req, res, next, err, function() {
                 //FIXME result is not a match?
+                apiHandler.handleResponse(req, res, next, err, result);
+                //FIXME: I need a match Object email.sendMatchEmail(match, tournamentName, false);
                 stats.updateForPlayer([body.home.player, body.home.partner, body.away.player, body.away.partner]);
-                ranking.calculateGeneralRanking(function() {
-                    apiHandler.handleResponse(req, res, next, err, result);
-                });
+                ranking.calculateGeneralRanking();
             });
         });
     });
@@ -42,14 +39,11 @@ module.exports = function(app) {
 		matchService.getById(_id, function(err, match) {
 			apiHandler.handleResponse(req, res, next, err, function() {
 				matchService.remove(_id, function(err, result) {
-					stats.updateForPlayer(match.getAllPlayers());
-					ranking.calculateGeneralRanking(function() {
-						apiHandler.handleResponse(req, res, next, err, result);
-					});
+                    apiHandler.handleResponse(req, res, next, err, result);
+                    stats.updateForPlayer(match.getAllPlayers());
+					ranking.calculateGeneralRanking();
 				})
-				
 			})
-			
 		})
 
 	});

@@ -59,7 +59,7 @@ var formatTeam = function(match, homeOrAway) {
         "\n\tGoals: "+ match.getGoals(homeOrAway) + ", Yellow cards: " + match.getYellowCards(homeOrAway) + ", Red cards: " + match.getRedCards(homeOrAway);
 };
 
-var sendMatchEmail = function(match, tournamentName) {
+var sendMatchEmail = function(match, tournamentName, isNew) {
     if (!hasConfigAvailable()) {
         return;
     }
@@ -85,7 +85,7 @@ var sendMatchEmail = function(match, tournamentName) {
             _.each(values, function(object) {
                 textValues.push(object.email);
             });
-            sendEmail(textValues.join(), creator + ' added a match in which you played', body)
+            sendEmail(textValues.join(), creator + (isNew ? 'added' : 'modified') + ' a match in which you played', body)
         }
     });
 };

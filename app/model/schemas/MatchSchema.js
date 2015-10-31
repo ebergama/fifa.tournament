@@ -11,8 +11,8 @@ var matchSchema = new Schema({
         partner: {type: String, required: false},
         goals: {type: Number, default: -1},
         penalties: {type: Number, default: 0},
-        redCards: {type: Number, default: -1},
-        yellowCards: {type: Number, default: -1},
+        redCards: {type: Number, default: 0},
+        yellowCards: {type: Number, default: 0},
         team: String
     },
     away: {
@@ -20,8 +20,8 @@ var matchSchema = new Schema({
         partner: {type: String, required: false},
         goals: {type: Number, default: -1},
         penalties: {type: Number, default: 0},
-        redCards: {type: Number, default: -1},
-        yellowCards: {type: Number, default: -1},
+        redCards: {type: Number, default: 0},
+        yellowCards: {type: Number, default: 0},
         team: String
     },
     tournament: {type: Schema.Types.ObjectId, ref: "Tournament"},
