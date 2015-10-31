@@ -51,7 +51,15 @@ angular.module('fifa').controller('modalInstanceController', function ($scope, $
 		else return undefined;
 	};
 	var selectToJson = function(selectObject, key) {
-		return selectObject && selectObject.selected ? selectObject.selected[key] : undefined;
+        if (selectObject) {
+            if (selectObject[key]) {
+                return selectObject[key];
+            } else if (selectObject.selected) {
+                return selectObject.selected[key];
+            } else {
+                return undefined;
+            }
+        }
 	};
 
 	var __select2 = function(modalMatch, type) {
@@ -71,9 +79,12 @@ angular.module('fifa').controller('modalInstanceController', function ($scope, $
 	__select2(modalMatch, "away");
 	modalMatch.date = match.date ? new Date(match.date) : new Date();
 
-    $scope.players = players;
+    $scope.players = _.filter(
+        _.sortBy(players, function(player) { return player.alias; }),
+        function(player) { return player.active !== false; }
+    );
     $scope.match = modalMatch;
-	
+
     $scope.ok = function () {
 		__reverseSelect2(modalMatch, "home");
 		__reverseSelect2(modalMatch, "away");

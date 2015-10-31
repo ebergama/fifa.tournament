@@ -19,7 +19,7 @@
         <h3>{{thePhase}}</h3>
         <h4>{{thePhase == 'Partidos' ? '' : 'Partidos'}}</h4>
 
-        
+
 		<div class="input-group custom-search-form" style="margin-top: 1em; width: 100%">
 			<input type="text" class="form-control" placeholder="Search for a match..." ng-model="searchMatch" ng-model-options="{debounce: 500}">
 			<span class="input-group-btn">
@@ -174,69 +174,74 @@
                 <thead>
                 <tr>
 					<th class="col-xs-3 col-md-3"> <!--Equipo Local-->
-						<ui-select ng-model="match.home.team.selected" theme="bootstrap" >
+                        <ui-select class="hidden-xs" ng-model="match.home.team.selected" theme="bootstrap" >
 							<ui-select-match placeholder="Select team">{{$select.selected.text}}</ui-select-match>
 							<ui-select-choices repeat="team in teams| filter: $select.search">
 								<div ng-bind-html="team.text | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="team.text for team in teams track by team.cssValue" ng-model="match.home.team"></select>
                     </th>
 					<th class="col-xs-3 col-md-3"><!--Calendario-->
 						Equipos
-						
+
                     </th>
 					<th class="col-xs-3 col-md-3"> <!--Equipo Visitante-->
-						<ui-select ng-model="match.away.team.selected" theme="bootstrap">
+						<ui-select class="hidden-xs" ng-model="match.away.team.selected" theme="bootstrap">
 							<ui-select-match placeholder="Select team">{{$select.selected.text}}</ui-select-match>
 							<ui-select-choices repeat="team in teams| filter: $select.search">
 								<div ng-bind-html="team.text | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="team.text for team in teams track by team.cssValue" ng-model="match.away.team"></select>
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
                     <td> <!--Jugador-->
-						<ui-select ng-model="match.home.player.selected" theme="bootstrap">
+                        <ui-select class="hidden-xs" ng-model="match.home.player.selected" theme="bootstrap">
 							<ui-select-match placeholder="Search ...">{{$select.selected.alias}}</ui-select-match>
 							<ui-select-choices repeat="player in players | filter: $select.search">
 								<div ng-bind-html="player.alias | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.home.player"></select>
                     </td>
                     <th>Jugadores</th>
                     <td> <!--Jugador-->
-						<ui-select ng-model="match.away.player.selected" theme="bootstrap">
+                        <ui-select class="hidden-xs" ng-model="match.away.player.selected" theme="bootstrap">
 							<ui-select-match placeholder="Search ...">{{$select.selected.alias}}</ui-select-match>
 							<ui-select-choices repeat="player in players | filter: $select.search">
 								<div ng-bind-html="player.alias | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.away.player"></select>
                     </td>
                 </tr>
                 <tr>
                     <td>
-						<ui-select ng-model="match.home.partner.selected" theme="bootstrap">
+                        <ui-select class="hidden-xs" ng-model="match.home.partner.selected" theme="bootstrap">
 							<ui-select-match placeholder="Search ...">{{$select.selected.alias}}</ui-select-match>
 							<ui-select-choices repeat="player in players | filter: $select.search">
 								<div ng-bind-html="player.alias | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.home.partner"></select>
                     </td>
                     <th>Compañeros</th>
                     <td>
-						<ui-select ng-model="match.away.partner.selected" theme="bootstrap">
+                        <ui-select class="hidden-xs" ng-model="match.away.partner.selected" theme="bootstrap">
 							<ui-select-match placeholder="Search ...">{{$select.selected.alias}}</ui-select-match>
 							<ui-select-choices repeat="player in players | filter: $select.search">
 								<div ng-bind-html="player.alias | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
-
+                        <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="player.alias for player in players" ng-model="match.away.partner"></select>
 					</td>
                 </tr>
                 <tr>
-                    <td><input type="number" ng-model="match.home.goals" class="form-control text-center numberBox"></td>
+                    <td><input  type="number" ng-model="match.home.goals" class="form-control text-center numberBox"></td>
                     <th>Goles</th>
                     <td><input type="number" ng-model="match.away.goals" class="form-control text-center numberBox"></td>
                 </tr>
