@@ -4,23 +4,22 @@ var playerService = require("../service/PlayerService");
 
 //FIXME: handle this better
 var __createNewPlayer = function(jsonPlayer, callback) {
-    var schemaPlayer = parser.parse(jsonPlayer);
-    if (schemaPlayer) {
-        playerService.getByGoogleId(schemaPlayer.googleId, function(err, player) {
+    var dbPlayer = parser.parse(jsonPlayer);
+    if (dbPlayer) {
+        playerService.getByGoogleId(dbPlayer.googleId, function(err, player) {
             if (err) console.error(err);
             else if (player) {
-                console.info("Player already created. " + schemaPlayer.username);
+                console.info("Player already created. " + dbPlayer.username);
                 callback.call(this, player);
             } else {
-                schemaPlayer.save(function(err, saved) {
+                playerService.save(dbPlayer, function(err, saved) {
                     if (err) {
                         console.error("cannot save player");
-                    }
-                    else {
+                    } else {
                         console.info("Player saved");
-                        callback.call(this, schemaPlayer);
+                        callback.call(this, saved);
                     }
-                });
+                })
             }
         })
     }
