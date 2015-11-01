@@ -13,7 +13,9 @@ controllers.controller("rankingController", ["$scope", "$location", "$http", "Da
         $location.path('/profile/' + player.alias);
     };
     
-    $scope.players = players;
+    $scope.players = _.filter(players, function (player) {
+        return player.active !== false;
+    });
     
     var calculateDelta = function(player) {
         var lastRanking = player.ranking;
