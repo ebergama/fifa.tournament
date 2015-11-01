@@ -1,10 +1,12 @@
 <h1 class="page-header"> Ranking </h1>
 <div class="panel panel-default">
+    
+    <% if (user && user.admin) { %>
     <div class="panel-heading">
-        <% if (user && user.admin) { %>
-            <button type="button" class="btn btn-danger" ng-click="updateRanking()" >Actualizar ranking!</button>
-        <% } %>
+        <button type="button" class="btn btn-danger" ng-click="updateRanking()" >Actualizar ranking!</button>
     </div>
+    <% } %>
+
     <div class="panel-body">
         <div id="ranking">
             <div class="table-responsive">

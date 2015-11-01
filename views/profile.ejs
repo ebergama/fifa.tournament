@@ -1,95 +1,158 @@
-<h1 class="page-header"> {{thePlayer.alias}} </h1>
+<h1 class="page-header"> Perfil </h1>
 <div class="panel panel-default">
 
-    <div class="panel-heading">
-        <h3>Estadísticas</h3>
-    </div>
     <div class="panel-body">
-        <div class="table-responsive">
-            <table>
-                <tbody>
-                <tr>
-                    <td><img ng-src="{{thePlayer.image}}" class="img-circle img-circle-large" ng-click="goTo(undefined) "></td>
-                    <td>
-                        <table class="table">
-                            <tbody>
-                            <tr><td>Partidos jugados</td><td>{{stats.matches.played}}</td></tr>
-                            <tr><td>Partidos ganados</td><td class="rankPositive">{{stats.matches.won}}</td></tr>
-                            <tr><td>Partidos empatados</td><td>{{stats.matches.tied}}</td></tr>
-                            <tr><td>Partidos perdidos</td><td class="rankNegative">{{stats.matches.lost}}</td></tr>
-                            <tr><td>Goles a favor</td><td class="rankPositive">{{stats.goals.scored}}</td></tr>
-                            <tr><td>Goles en contra</td><td class="rankNegative">{{stats.goals.received}}</td></tr>
-                            <tr><td>Goles por partido</td><td>{{stats.goals.scored / stats.matches.played | number:2}}</td></tr>
-                            <tr><td>Goles por partido (recibidos)</td><td>{{stats.goals.received / stats.matches.played | number:2}}</td></tr>
-                            <tr><td>Diferencia de gol</td>
-                                <!--//FIXME: why diff is zero?-->
-                                <td ng-init="diff = stats.goals.scored - stats.goals.received;" ng-class="diff >0 ? 'rankPositive' : diff < 0 ? 'rankNegative' : ''">
-                                    {{stats.goals.scored - stats.goals.received}}
-                                </td></tr>
-                            <tr><td>Amarillas (Partidos)</td><td>{{stats.cards.yellow.count}} ( {{stats.cards.yellow.matches}} )</td></tr>
-                            <tr><td>Rojas (Partidos)</td><td>{{stats.cards.red.count}} ( {{stats.cards.red.matches}} )</td></tr>
-                            </tbody>
-                        </table>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+        <!--My Home-->
+        <ul class="nav nav-tabs nav-justified hidden-xs">
+            <li ng-repeat="tab in tabs" role="presentation" ng-class="{active: selectedTab === tab}">
+                <a href="#" ng-click="selectTab(tab)">{{getTabName(tab)}}</a>
+            </li>
+        </ul>
+        <ul class="nav nav-tabs hidden-sm hidden-md hidden-lg">
+            <li role="presentation" class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    {{getTabName(selectedTab)}} <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li ng-repeat="tab in tabs" role="presentation" ng-class="{active: selectedTab === tab}">
+                        <a href="#" ng-click="selectTab(tab)">{{getTabName(tab)}}</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        
+        <div id="home" ng-show="selectedTab === 'home'" class="profile-tab col-xs-12 col-sm-10 col-md-12">
+            <div class="well well-sm">
+                <div class="row">
+                    <div class="col-sm-6 col-md-4">
+                        <img ng-src="{{thePlayer.image}}" class="img-responsive img-circle">
+                    </div>
+                    <div class="col-sm-6 col-md-8">
+                        <h3>{{thePlayer.firstName + " " +thePlayer.lastName }}</h3>
+                        </br>
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-4 col-md-4">Email:</div>
+                            <div class="col-xs-8 col-sm-8 col-md-8">{{thePlayer.email}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-4 col-md-4">Alias:</div>
+                            <div class="col-xs-8 col-sm-8 col-md-8">{{thePlayer.alias}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-4 col-md-4">Ranking:</div>
+                            <div class="col-xs-8 col-sm-8 col-md-8">{{thePlayer.ranking}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3 col-sm-4 col-md-4">Ultimo acceso:</div>
+                            <div class="col-xs-8 col-sm-8 col-md-8">{{thePlayer.lastAccess | date:'dd-MM-yyyy'}}</div>
+                        </div>
+                        </br>
+                        <button type="button" disabled class="btn btn-primary"><i class="fa fa-cog"></i><span style="margin-left: 0.5em">Editar</span></button>
+                    </div>
+                </div>
+            </div>
         </div>
+        
+        <!--Stats-->
+        <div id='stats' ng-show="selectedTab === 'stats'" class="profile-tab table-responsive row">
+            <div class="col-md-10">
+                <table class="table table-hover table-striped">
+                    <tbody>
+                    <tr><td>Partidos jugados</td><td>{{stats.matches.played}}</td></tr>
+                    <tr><td>Partidos ganados</td><td class="rankPositive">{{stats.matches.won}}</td></tr>
+                    <tr><td>Partidos empatados</td><td>{{stats.matches.tied}}</td></tr>
+                    <tr><td>Partidos perdidos</td><td class="rankNegative">{{stats.matches.lost}}</td></tr>
+                    <tr><td>Goles a favor</td><td class="rankPositive">{{stats.goals.scored}}</td></tr>
+                    <tr><td>Goles en contra</td><td class="rankNegative">{{stats.goals.received}}</td></tr>
+                    <tr><td>Goles por partido</td><td>{{stats.goals.scored / stats.matches.played | number:2}}</td></tr>
+                    <tr><td>Goles por partido (recibidos)</td><td>{{stats.goals.received / stats.matches.played | number:2}}</td></tr>
+                    <tr><td>Diferencia de gol</td>
+                        <!--//FIXME: why diff is zero?-->
+                        <td ng-init="diff = stats.goals.scored - stats.goals.received;" ng-class="diff >0 ? 'rankPositive' : diff < 0 ? 'rankNegative' : ''">
+                            {{stats.goals.scored - stats.goals.received}}
+                        </td></tr>
+                    <tr><td>Amarillas (Partidos)</td><td>{{stats.cards.yellow.count}} ( {{stats.cards.yellow.matches}} )</td></tr>
+                    <tr><td>Rojas (Partidos)</td><td>{{stats.cards.red.count}} ( {{stats.cards.red.matches}} )</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!--History-->
+        <div id="history" ng-show="selectedTab === 'history'" class="table-responsive profile-tab">
+            <table class="table middleData text-center">
+                <thead>
+                <tr>
+                    <th><span>Ranking</span></th>
 
-    <div class="panel-heading">
-        <h3>Historial ranking</h3>
-    </div>
-    <div class="panel-body">
-        <div class="table-responsive">
-            <table class="table">
-                <tbody>
-                <tr ng-repeat="entry in history | orderBy:'-'">
-                    <td> <!--Dia-->
-                        {{entry.date | date:'dd-MM-yyyy'}}
-                    </td>
-                    <td>{{entry.ranking}}</td>
-                    <td ng-class="entry.delta >0 ? 'rankPositive' : entry.delta < 0 ? 'rankNegative' : ''">
+                    <th><span>Δ</span></th>
+                    <th class="hidden-xs">Jugadores</th>
+                    <th class="hidden-lg hidden-md hidden-sm">J</th>
+                    <th class="hidden-xs">Equipo</th>
+                    <th>L</th>
+                    <th></th>
+                    <th>V</th>
+                    <th class="hidden-xs">Equipo</th>
+                    <th class="hidden-xs">Jugadores</th>
+                    <th class="hidden-lg hidden-md hidden-sm">J</th>
+                    <th><span>Dia</span></th>
+                </tr>
+                </thead>
+                <tbody ng-repeat="entry in history | orderBy:'-'">
+
+                <tr ng-class="entry.match.clazz">
+                    <td rowspan="2" >{{entry.ranking}}</td>
+                    <td rowspan="2"  ng-class="entry.delta >0 ? 'rankPositive' : entry.delta < 0 ? 'rankNegative' : ''">
                         {{entry.delta | number:2}}
 
                         <i ng-if="entry.delta > 0" class="fa fa-arrow-circle-up"></i>
                         <i ng-if="entry.delta < 0" class="fa fa-arrow-circle-down"></i>
                     </td>
 
-                    <td ng-class="match.home.clazz" ng-click="goTo(entry.match.home.player)"> <!--Jugador-->
-                        <img class="img-circle" ng-src="{{getPicture(entry.match.home.player)}}">
-                        <span>{{entry.match.home.player}}</span>
+                    <td ng-class="entry.match.home.clazz"> <!--Jugador-->
+                        <img class="img-circle img-circle-small" ng-src="{{getPicture(entry.match.home.player)}}">
+                        <span class="hidden-xs">{{entry.match.home.player}}</span>
                     </td>
-                    <td ng-class="match.home.clazz" ng-click="goTo(entry.match.home.partner)"> <!--Pareja-->
-                        <img class="img-circle" ng-src="{{getPicture(entry.match.home.partner)}}">
-                        <span>{{entry.match.home.partner}}</span>
-                    </td>
-                    <td ng-class="match.home.clazz"> <!--Equipo-->
+                    <td rowspan="2" ng-class="entry.match.home.clazz" class="hidden-xs col-md-1"> <!--Equipo-->
                         <div class="team {{entry.match.home.team}}"></div>
                     </td>
-                    <td ng-class="match.home.clazz" class="matchGoals"> <!--Local-->
+                    <td rowspan="2" ng-class="entry.match.home.clazz" class="matchGoals"> <!--Local-->
                         {{entry.match.home.goals}}
-                        <span ng-if="match.home.penalties">({{entry.match.home.penalties}})</span>
+                        <span ng-if="entry.match.home.penalties">({{entry.match.home.penalties}})</span>
                     </td>
-                    <td class="matchGoals">vs</td> <!--vs-->
-                    <td ng-class="match.away.clazz" class="matchGoals"> <!--Visitante-->
+                    <td rowspan="2">vs</td> <!--vs-->
+                    <td rowspan="2" ng-class="entry.match.away.clazz" class="matchGoals"> <!--Visitante-->
                         {{entry.match.away.goals}}
-                        <span ng-if="match.away.penalties">({{entry.match.away.penalties}})</span>
+                        <span ng-if="entry.match.away.penalties">({{match.away.penalties}})</span>
                     </td>
-                    <td ng-class="match.away.clazz"> <!--Equipo-->
+                    <td rowspan="2" ng-class="entry.match.away.clazz" class="hidden-xs col-md-1"> <!--Equipo-->
                         <div class="team {{entry.match.away.team}}"></div>
                     </td>
-                    <td ng-class="match.away.clazz" ng-click="goTo(entry.match.away.player)"> <!--Jugador-->
-                        <img class="img-circle" ng-src="{{getPicture(entry.match.away.player)}}">
-                        <span>{{entry.match.away.player}}</span>
+                    <td ng-class="entry.match.away.clazz"> <!--Jugador-->
+                        <img class="img-circle img-circle-small" ng-src="{{getPicture(entry.match.away.player)}}" ng-click="addPlayerTag(entry.match.away.player)">
+                        <span class="hidden-xs">{{entry.match.away.player}}</span>
                     </td>
-                    <td ng-class="match.away.clazz" ng-click="goTo(entry.match.away.partner)">    <!--Pareja-->
-                        <img class="img-circle" ng-src="{{getPicture(entry.match.away.partner)}}">
-                        <span>{{entry.match.away.partner}}</span>
+                    <td rowspan="2" class="col-md-1"> <!--Dia-->
+                        {{entry.date | date:'dd-MM-yy'}}
+                    </td>
+                </tr>
+                <tr ng-class="entry.match.clazz">
+                    <td ng-class="entry.match.home.clazz" ng-show="getPicture(entry.match.home.partner)"> <!--Pareja-->
+                        <img class="img-circle img-circle-small" ng-src="{{getPicture(entry.match.home.partner)}}" ng-click="addPlayerTag(entry.match.home.partner)">
+                        <span class="hidden-xs">{{entry.match.home.partner}}</span>
+                    </td>
+                    <td ng-class="entry.match.away.clazz" ng-show="getPicture(entry.match.away.partner)">    <!--Pareja-->
+                        <img class="img-circle img-circle-small" ng-src="{{getPicture(entry.match.away.partner)}}" ng-click="addPlayerTag(entry.match.away.partner)"  >
+                        <span class="hidden-xs">{{entry.match.away.partner}}</span>
                     </td>
                 </tr>
                 </tbody>
             </table>
         </div>
+
+        <!--Feeling-->
+        <div ng-show="selectedTab === 'feeling'" class="profile-tab">
+            <h2>Not ready!</h2>
+        </div>
     </div>
-    
 </div>
