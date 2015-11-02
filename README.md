@@ -35,4 +35,10 @@ Replace the <latest> tag by the actual latest backup filename
 > node server.js
 ```
 
-Developer information: ezequielbergamaschi@gmail.com
+## Developer information
+
+- Ezequiel Bergamaschi - ezequielbergamaschi@gmail.com
+
+### Collaborators:
+- Nicolas Rusconi - nicolas.rusconi+github@gmail.com
+- Santiago Perez - sperez@gmail.com
