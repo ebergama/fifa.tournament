@@ -24,16 +24,14 @@ controllers.controller("profileController", ["$scope", "$location", "player", "m
                 if (homeGoals == awayGoals) {
                     homeGoals += (match.home.penalties || 0);
                     awayGoals += (match.away.penalties || 0);
-                } else {
-                    delete match.home.penalties;
-                    delete match.away.penalties;
                 }
+                var playerIsHome = [match.home.player, match.home.partner].indexOf(player.alias) != -1;
                 if (homeGoals > awayGoals) {
-                    match.home.clazz = "won";
-                    match.away.clazz = "";
+                    match.home.clazz = playerIsHome ? "won" : "";
+                    match.away.clazz = playerIsHome ? "" : "lost";
                 } else if (homeGoals < awayGoals) {
-                    match.home.clazz = "";
-                    match.away.clazz = "won";
+                    match.home.clazz = playerIsHome ? "lost" : "";
+                    match.away.clazz = playerIsHome ? "" : "won";
                 } else {
                     match.home.clazz = "";
                     match.away.clazz = "";

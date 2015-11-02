@@ -83,8 +83,6 @@
             <table class="table middleData text-center">
                 <thead>
                 <tr>
-                    <th><span>Ranking</span></th>
-
                     <th><span>Δ</span></th>
                     <th class="hidden-xs">Jugadores</th>
                     <th class="hidden-lg hidden-md hidden-sm">J</th>
@@ -95,13 +93,14 @@
                     <th class="hidden-xs">Equipo</th>
                     <th class="hidden-xs">Jugadores</th>
                     <th class="hidden-lg hidden-md hidden-sm">J</th>
+                    <th><span>Ranking</span></th>
                     <th><span>Dia</span></th>
                 </tr>
                 </thead>
                 <tbody ng-repeat="entry in history | orderBy:'-'">
 
                 <tr ng-class="entry.match.clazz">
-                    <td rowspan="2" >{{entry.ranking}}</td>
+                    
                     <td rowspan="2"  ng-class="entry.delta >0 ? 'rankPositive' : entry.delta < 0 ? 'rankNegative' : ''">
                         {{entry.delta | number:2}}
 
@@ -109,7 +108,7 @@
                         <i ng-if="entry.delta < 0" class="fa fa-arrow-circle-down"></i>
                     </td>
 
-                    <td ng-class="entry.match.home.clazz"> <!--Jugador-->
+                    <td ng-class="entry.match.home.clazz" ng-click="goTo(entry.match.home.player)"> <!--Jugador-->
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(entry.match.home.player)}}">
                         <span class="hidden-xs">{{entry.match.home.player}}</span>
                     </td>
@@ -128,20 +127,21 @@
                     <td rowspan="2" ng-class="entry.match.away.clazz" class="hidden-xs col-md-1"> <!--Equipo-->
                         <div class="team {{entry.match.away.team}}"></div>
                     </td>
-                    <td ng-class="entry.match.away.clazz"> <!--Jugador-->
+                    <td ng-class="entry.match.away.clazz" ng-click="goTo(entry.match.away.player)"> <!--Jugador-->
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(entry.match.away.player)}}" ng-click="addPlayerTag(entry.match.away.player)">
                         <span class="hidden-xs">{{entry.match.away.player}}</span>
                     </td>
+                    <td rowspan="2" class="highlightResult" >{{entry.ranking}}</td>
                     <td rowspan="2" class="col-md-1"> <!--Dia-->
                         {{entry.date | date:'dd-MM-yy'}}
                     </td>
                 </tr>
                 <tr ng-class="entry.match.clazz">
-                    <td ng-class="entry.match.home.clazz" ng-show="getPicture(entry.match.home.partner)"> <!--Pareja-->
+                    <td ng-class="entry.match.home.clazz" ng-show="getPicture(entry.match.home.partner)" ng-click="goTo(entry.match.home.partner)"> <!--Pareja-->
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(entry.match.home.partner)}}" ng-click="addPlayerTag(entry.match.home.partner)">
                         <span class="hidden-xs">{{entry.match.home.partner}}</span>
                     </td>
-                    <td ng-class="entry.match.away.clazz" ng-show="getPicture(entry.match.away.partner)">    <!--Pareja-->
+                    <td ng-class="entry.match.away.clazz" ng-show="getPicture(entry.match.away.partner)" ng-click="goTo(entry.match.away.partner)">    <!--Pareja-->
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(entry.match.away.partner)}}" ng-click="addPlayerTag(entry.match.away.partner)"  >
                         <span class="hidden-xs">{{entry.match.away.partner}}</span>
                     </td>
