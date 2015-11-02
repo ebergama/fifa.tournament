@@ -85,7 +85,7 @@ var sendMatchEmail = function(match, tournamentName, isNew) {
             _.each(values, function(object) {
                 textValues.push(object.email);
             });
-            sendEmail(textValues.join(), creator + (isNew ? 'added' : 'modified') + ' a match in which you played', body)
+            sendEmail(textValues.join(), creator + " " + (isNew ? 'added' : 'modified') + ' a match in which you played', body)
         }
     });
 };
