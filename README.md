@@ -1,5 +1,16 @@
 # fifa.tournament
 
+Fifa Tournament is an application for keep tracking about the Fifa/PES matches results with your friends or colleagues. It works for 1 vs 1 and 2 vs 2 matches.
+
+## Features:
+
+- Google Authentication
+- Build your own stats!
+- Ranking ladder system
+- Players profiles.
+- Tournament generation.
+- Single match track.
+
 ## Setup
 
 ### Requirements 
