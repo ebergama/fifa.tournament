@@ -26,7 +26,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="player in stats track by $index | orderBy:'-ranking'" ng-if="player.active != false" ng-click="goTo(player)" style="cursor: pointer">
+                    <tr ng-repeat="player in players track by $index | orderBy:'-ranking'" ng-if="player.active != false" ng-click="goTo(player)" style="cursor: pointer">
                         <td>{{$index + 1}}</td>
                         <td><img ng-src="{{player.image}}" class="img-circle"></td>
                         <td class="hidden-xs"><span>{{player.alias}}</span></td>
