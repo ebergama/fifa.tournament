@@ -30,7 +30,7 @@ var getForAlias = function(alias, callback) {
 };
 
 var getForTournament = function(tournamentId, callback) {
-    Match.find({tournament: __getObjectId(tournamentId)}, callback);
+    Match.find({tournament: __getObjectId(tournamentId)}).populate("tournament").exec(callback);
 };
 
 var getPlayedMatches = function(callback, sort) {
