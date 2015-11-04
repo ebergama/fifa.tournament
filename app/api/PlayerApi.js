@@ -1,5 +1,6 @@
 var rankingService = require("../service/RankingService");
 var statsService = require("../service/BasicStatsService");
+var advStatsService = require("../service/AdvancedStatsService");
 var apiHandler = require("./ApiHandler");
 var playerService = require("../service/PlayerService");
 var _ = require("underscore");
@@ -37,5 +38,10 @@ module.exports = function(app) {
     app.get("/api/player/stats/:alias", function(req, res, next) {
         res.json(statsService.playerStatistics(req.params.alias));
     });
+    app.get("/api/player/feeling/:alias", function(req, res, next) {
+        advStatsService.calculateFeeling(req.params.alias, function(result) {
+            apiHandler.handleResponse(req, res, next, null, result);
+        })
+    })
     
 };

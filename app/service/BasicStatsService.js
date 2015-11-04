@@ -1,20 +1,22 @@
 var __ = require("../constants");
 var matchService = require("./MatchService");
 var _ = require("underscore");
-var players = {};
+var statsCollector = require("./StatCollector");
+var stats = {};
 
 var playerStatistics = function(alias) {
-    return players[alias];
+    return stats[alias];
 };
 
 var allPlayerStatistics = function() {
-    return players;
+    return stats;
 };
 
 var updateForPlayer = function(playersArray) {
     _.each(playersArray, function(alias) {
-        players[alias] = __createBasicModel(); //force recalculation
+        stats[alias] = statsCollector.createBasicModel(); //force recalculation
     });
+    //FIXME: I can ask only for the matches of each player.
     getAllMatches(function(matches) {
         _.each(matches, function(match) {
             __collectBasicStat(match, function(alias) {
@@ -34,40 +36,10 @@ var getAllMatches = function (callback) {
     });
 };
 
-var __createBasicModel = function(){
-    return {
-        matches: { played: 0, won: 0, lost: 0, tied: 0 },
-        goals: { received: 0, scored: 0 },
-        cards: {
-            red: { matches: 0, count: 0 },
-            yellow: { matches: 0, count: 0 }
-        }
-    };
-};
 
 var __verify = function(alias) {
-    if (alias && !players[alias]) {
-        players[alias] = __createBasicModel();
-    }
-};
-
-var __addPlayerMatch = function(alias, won, lost, tied) {
-    var matchesStat = players[alias].matches;
-    matchesStat.played += 1;
-    matchesStat.won += won;
-    matchesStat.lost += lost;
-    matchesStat.tied += tied;
-};
-
-var __addPlayerGoals = function(alias, scored, received) {
-    players[alias].goals.scored += scored;
-    players[alias].goals.received += received;
-};
-
-var __addPlayerCards = function(alias, amount, type) {
-    if (amount != -1) {
-        players[alias].cards[type].count += amount;
-        players[alias].cards[type].matches += 1;
+    if (alias && !stats[alias]) {
+        stats[alias] = statsCollector.createBasicModel();
     }
 };
 
@@ -79,13 +51,11 @@ var __collectBasicStat = function(match, playerFilter) {
         _.each(players, function(player) {
             if (playerFilter(player) && player) {
                 __verify(player);
-                var won = match.hasWon(type);
-                var lost = match.hasLost(type);
-                var tied = match.hasTied(type);
-                __addPlayerMatch(player, won, lost, tied);
-                __addPlayerGoals(player, match.getGoals(type), match.getGoals(match.inverse(type)));
-                __addPlayerCards(player, match.getYellowCards(type), "yellow");
-                __addPlayerCards(player, match.getRedCards(type), "red");
+				var stat = stats[player];
+                statsCollector.addMatch(stat, match, type);
+                statsCollector.addGoals(stat, match, type);
+                statsCollector.addCards(stat, match.getYellowCards(type), "yellow");
+                statsCollector.addCards(stat, match.getRedCards(type), "red");
             }
         });
     };
