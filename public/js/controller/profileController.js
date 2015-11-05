@@ -120,50 +120,6 @@ controllers.controller("profileController", ["$scope", "$location", "player", "m
         $chart.highcharts(opts);
         console.log("done");
     };
-    $scope.initChartDeprecated = function() {
-        //debugger;
-        var $chart = $('#chart');
-        $chart.width(30 * $scope.history.length).height(350);
-        
-        var ctx = $chart[0].getContext("2d");
-        var points = _.pluck($scope.history, 'ranking');
-        //points = points.map(function(p) { return [1,p]; });
-        var labels = _.map($scope.history, function(h) { return new Date(h.date).getMonth() + "/" + new Date(h.date).getDate(); });
-        points.reverse();
-        labels.reverse();
-        var data = {
-            labels: labels,
-            datasets: [
-                {
-                    label: "Ranking",
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(151,187,205,1)",
-                    data: points
-                }/*,
-                {
-                    label: "My Second dataset",
-                    fillColor: "rgba(220,220,220,0.2)",
-                    strokeColor: "rgba(220,220,220,1)",
-                    pointColor: "rgba(220,220,220,1)",
-                    pointStrokeColor: "#fff",
-                    pointHighlightFill: "#fff",
-                    pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: [28, 48, 40, 19, 86, 27, 90]
-                }*/
-            ]
-            
-        };
-        var opts = {
-            pointHitDetectionRadius: 8,
-        };
-        
-        var myNewChart = new Chart(ctx).Line(data, opts);
-        
-    }
 
 	_.each(feeling, function(myFeeling, partner) {
 		if($scope.playersMap[partner] && $scope.playersMap[partner].active !== false) {
