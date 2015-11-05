@@ -74,6 +74,53 @@ controllers.controller("profileController", ["$scope", "$location", "player", "m
     $scope.feeling = {};
     $scope.feeling[""] = _.map(feelingStats, function(stat) {return stat.name});
 
+    $scope.initChart = function() {
+        var $chart = $('#chart2');
+        var points = _.map(_.pluck($scope.history, 'ranking'), parseFloat);
+        var opts = {
+            chart: {
+                type: 'line',
+                zoomType: 'x',
+                panning: true,
+                panKey: 'shift'
+            },
+            title: {
+                text: 'Historial ranking'
+            },
+            xAxis: {
+                title: {
+                    text: 'Fecha'
+                }
+            },
+            yAxis: {
+                title: {
+                    text: 'Ranking'
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true,
+                        formatter: function () {
+                            var n = parseInt(10 * (points[this.x] - (points[this.x - 1] || 0))) / 10;
+                            if (n >= 10) n = parseInt(n);
+                            return "<span style='color: " + ((n>0)?"green":"red") + "; font-size: 8px; font-weight: normal'>" + n + "</span>";
+                        },
+                        useHTML: true,
+                        padding: 10
+                    }
+                }
+            },
+            series: [{
+                name: $scope.thePlayer.alias,
+                data: points
+            }]
+        };
+
+        $chart.highcharts(opts);
+        console.log("done");
+    };
+
 	_.each(feeling, function(myFeeling, partner) {
 		if($scope.playersMap[partner] && $scope.playersMap[partner].active !== false) {
 			_.each(feelingStats, function(stat) {
