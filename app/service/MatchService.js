@@ -30,6 +30,7 @@ var getForAlias = function(alias, callback) {
 };
 
 var getForTournament = function(tournamentId, callback) {
+    //FIXME: mmmmmmmm review this.
     Match.find({tournament: __getObjectId(tournamentId)}).populate("tournament").exec(callback);
 };
 
