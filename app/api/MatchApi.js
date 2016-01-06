@@ -15,9 +15,9 @@ module.exports = function(app) {
                 body.tournament = tournament._id;
                 matchService.save(body, function (err, match) {
                     apiHandler.handleResponse(req, res, next, err, "created");
-                    email.sendMatchEmail(match, tournamentName, true);
                     stats.updateForPlayer(match.getAllPlayers());
                     ranking.calculateGeneralRanking();
+                    email.sendMatchEmail(match, tournamentName, true);
                 });
             });
         });

@@ -30,23 +30,6 @@ var hasConfigAvailable = function() {
     return true;
 };
 
-var findUsersForMatchEmail = function(match) {
-    var findIn = function (players, alias) {
-        return players.indexOf(alias) != -1;
-    };
-    var createdByAlias = match.getCreatedBy();
-    var homePlayers = match.getPlayers(__.HOME);
-    var awayPlayers = match.getPlayers(__.AWAY);
-
-    if (findIn(homePlayers, createdByAlias)) {
-        return awayPlayers;
-    } else if (findIn(awayPlayers, createdByAlias)) {
-        return homePlayers;
-    } else {
-        return _.union(homePlayers, awayPlayers);
-    }
-};
-
 var formatTeam = function(match, homeOrAway) {
     var players = match.getPlayers(homeOrAway);
     var player = players[0];
@@ -64,27 +47,35 @@ var sendMatchEmail = function(match, tournamentName, isNew) {
         return;
     }
     var creator = match.getCreatedBy();
-    var body = "Match highlights: \n\n" +
-            "Tournament: " + tournamentName + ", Phase: " + match.getPhase() + "\n\n" +
-            "Home Team: \n" +
-            formatTeam(match, __.HOME) + "\n" +
-            "----\n" +
-            "Away Team: \n" +
-            formatTeam(match, __.AWAY) + "\n\n" +
-        "Cheers, The Fifa Medallia Team\n " + (process.env.HEROKU_URL) ;
-    var aliases = findUsersForMatchEmail(match);
     var condition = {"$or": []};
-    _.each(aliases, function(alias) {
+    _.each(match.getAllPlayers(), function(alias) {
         condition["$or"].push({"alias": alias})
     });
-    playerService.getPlayersBy(condition, function(err, values) {
+    var formatRanking = function (dbPlayers) {
+        var result = "Ranking: \n";
+        _.each(dbPlayers, function (object) {
+            result += object.alias + ": " + object.ranking + ", delta: " + (object.ranking - object.previousRanking).toFixed(2) + "\n";
+        });
+        return result;
+    };
+
+    playerService.getPlayersBy(condition, function(err, dbPlayers) {
         if (err) {
             console.error(err);
         } else {
             var textValues = [];
-            _.each(values, function(object) {
+            _.each(dbPlayers, function(object) {
                 textValues.push(object.email);
             });
+            var body = "Match highlights: \n\n" +
+                "Tournament: " + tournamentName + ", Phase: " + match.getPhase() + "\n\n" +
+                "Home Team: \n" +
+                formatTeam(match, __.HOME) + "\n" +
+                "----\n" +
+                "Away Team: \n" +
+                formatTeam(match, __.AWAY) + "\n\n" +
+                formatRanking(dbPlayers) +
+                "Cheers, The Fifa Medallia Team\n " + (process.env.HEROKU_URL) ;
             sendEmail(textValues.join(), creator + " " + (isNew ? 'added' : 'modified') + ' a match in which you played', body)
         }
     });
