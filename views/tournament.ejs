@@ -90,16 +90,16 @@
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.away.player)}}" ng-click="addPlayerTag(match.away.player)">
                         <span class="hidden-xs">{{match.away.player}}</span>
                     </td>
-                    <% if (user && user.admin) { %>
                     <td rowspan="2" class="col-md-2">
+                    <a ng-controller="modalController" class="btn btn-warning" href="#" ng-click="cloneMatch(match, this)">
+                        <i class="fa fa-files-o fa-lg"></i></a>
+                    <% if (user && user.admin) { %>
 						<a ng-controller="modalController" class="btn btn-success" href="#" ng-click="open(match, this)">
-                            <i class="fa fa-plus fa-lg"></i></a>
-                        <a ng-controller="modalController" class="btn btn-warning" href="#" ng-click="cloneMatch(match, this)">
-                            <i class="fa fa-files-o fa-lg"></i></a>
+                            <i class="fa  fa-pencil-square-o fa-lg"></i></a>
                         <a class="btn btn-danger" href="#" ng-click="deleteMatch(match, this)">
                             <i class="fa fa-trash-o fa-lg"></i></a>
-					</td>
                     <% } %>
+                    </td>
                 </tr>
                 <tr ng-class="match.clazz">
                     <td ng-class="match.home.clazz" ng-show="getPicture(match.home.partner)"> <!--Pareja-->
@@ -174,12 +174,14 @@
                 <thead>
                 <tr>
 					<th class="col-xs-3 col-md-3"> <!--Equipo Local-->
+                        <!--Desktop only-->
                         <ui-select class="hidden-xs" ng-model="match.home.team.selected" theme="bootstrap" >
 							<ui-select-match placeholder="Select team">{{$select.selected.text}}</ui-select-match>
 							<ui-select-choices repeat="team in teams| filter: $select.search">
 								<div ng-bind-html="team.text | highlight: $select.search"></div>
 							</ui-select-choices>
 						</ui-select>
+                        <!--Mobile only-->
                         <select class="btn btn-default form-control hidden-lg hidden-md" ng-options="team.text for team in teams track by team.cssValue" ng-model="match.home.team.selected">
                             <option value=""></option>
                         </select>
