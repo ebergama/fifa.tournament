@@ -90,16 +90,19 @@
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.away.player)}}" ng-click="addPlayerTag(match.away.player)">
                         <span class="hidden-xs">{{match.away.player}}</span>
                     </td>
+                    <% if (user) { %>
                     <td rowspan="2" class="col-md-2">
-                    <a ng-controller="modalController" class="btn btn-warning" href="#" ng-click="cloneMatch(match, this)">
-                        <i class="fa fa-files-o fa-lg"></i></a>
-                    <% if (user && user.admin) { %>
-						<a ng-controller="modalController" class="btn btn-success" href="#" ng-click="open(match, this)">
+                        <a ng-controller="modalController" class="btn btn-warning" href="#" ng-click="cloneMatch(match, this)">
+                            <i class="fa fa-files-o fa-lg"></i></a>
+                        <% if (user.admin) { %>
+                        <a ng-controller="modalController" class="btn btn-success" href="#" ng-click="open(match, this)">
                             <i class="fa  fa-pencil-square-o fa-lg"></i></a>
                         <a class="btn btn-danger" href="#" ng-click="deleteMatch(match, this)">
                             <i class="fa fa-trash-o fa-lg"></i></a>
-                    <% } %>
+                        <% } %>
                     </td>
+                    <% } %>
+
                 </tr>
                 <tr ng-class="match.clazz">
                     <td ng-class="match.home.clazz" ng-show="getPicture(match.home.partner)"> <!--Pareja-->
