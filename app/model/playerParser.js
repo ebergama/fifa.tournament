@@ -16,16 +16,17 @@
 function parse(jsonPlayer) {
     //console.log(jsonPlayer);
     var player = {};
-    var medalliaDomain = "medallia.com";
+    var emailDomain = process.env.EMAIL_DOMAIN;
     var email = jsonPlayer.email;
     var domain = jsonPlayer.domain || email.split("@")[1];
-    if (domain != medalliaDomain) {
-        console.error("invalid domain: " + domain);
-        return;
+    if (domain != emailDomain) {
+        var errorMsg = "invalid domain: " + domain;
+        console.error(errorMsg);
+        throw new Error(errorMsg);
     }
     player.firstName = jsonPlayer.name.givenName;
     player.lastName = jsonPlayer.name.familyName;
-    player.username = email.replace("@" + medalliaDomain, "");
+    player.username = email.replace("@" + emailDomain, "");
     player.email = jsonPlayer.email;
     player.alias = player.username;
     player.image = jsonPlayer.photos[0].value;

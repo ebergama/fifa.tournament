@@ -2,10 +2,9 @@ var GoogleStrategy = require('passport-google-oauth2').Strategy;
 var parser = require("../model/playerParser");
 var playerService = require("../service/PlayerService");
 
-//FIXME: handle this better
 var __createNewPlayer = function(jsonPlayer, callback) {
-    var dbPlayer = parser.parse(jsonPlayer);
-    if (dbPlayer) {
+    try {
+        var dbPlayer = parser.parse(jsonPlayer);
         playerService.getByGoogleId(dbPlayer.googleId, function(err, player) {
             if (err) console.error(err);
             else if (player) {
@@ -22,7 +21,10 @@ var __createNewPlayer = function(jsonPlayer, callback) {
                 })
             }
         })
+    } catch(e) {
+        callback.call(this, false);
     }
+
 };
 
 module.exports = function(passport) {

@@ -14,11 +14,14 @@ module.exports = function(app, passport, newrelic) {
 	app.get( '/auth/google/callback',
 		passport.authenticate( 'google', {
 			successRedirect: '/',
-			failureRedirect: '/login'
+			failureRedirect: '/error'
 		}));
 	
 	app.get('/login', function(req, res){
 		res.render('login', { user: req.user });
+	});
+	app.get('/error', function(req, res) {
+		res.render('error');
 	});
 	
 	app.get('/account', ensureAuthenticated, function(req, res){

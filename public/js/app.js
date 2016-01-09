@@ -70,6 +70,9 @@ var app = angular.module('fifa', ['ngRoute', 'ui.bootstrap', 'fifaControllers', 
                 when('/rules', {
                     templateUrl: 'templates/rules'
                 }).
+                when('/error', {
+                    templateUrl: 'templates/error'
+                }).
                 otherwise({
                     redirectTo: '/tournament/Partidos por ranking'
                 });
