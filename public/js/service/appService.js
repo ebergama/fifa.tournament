@@ -43,8 +43,12 @@ angular.module("fifa").service("tournamentService", ["$http", function($http) {
         }
     }])
     .service("matchService", ["$http", function($http) {
-        this.getMatches = function(tournamentName) {
-            return $http.get("/api/match/tournament/" + tournamentName).then(function(response) {
+        this.getMatches = function(tournamentName, page, sort) {
+            page = page || 1;
+            var basePath = "/api/match/tournament/" + tournamentName;
+            basePath += "?page=" + page;
+            basePath += "&sort=" + sort;
+            return $http.get(basePath).then(function(response) {
                 return response.data;
             });
 

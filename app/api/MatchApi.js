@@ -54,7 +54,7 @@ module.exports = function(app) {
         tournamentService.getTournament(condition, function(err, tournament) {
             apiHandler.handleResponse(res, req, next, err, function() {
                 if (!tournament) return null;
-                matchService.getForTournament(tournament._id, function(err, matches) {
+                matchService.getForTournament(tournament._id, req.query.page || 1, req.query.sort || "desc", function(err, matches) {
                     apiHandler.handleResponse(req, res, next, err, matches);
                 });
             })

@@ -29,9 +29,13 @@ var getForAlias = function(alias, callback) {
     }).populate("tournament").exec(callback);
 };
 
-var getForTournament = function(tournamentId, callback) {
+var getForTournament = function(tournamentId, page, sort, callback) {
     //FIXME: mmmmmmmm review this.
-    Match.find({tournament: __getObjectId(tournamentId)}).populate("tournament").exec(callback);
+    Match.paginate(
+        {tournament: __getObjectId(tournamentId)},
+        {page:page, limit:30, populate: "tournament", sort: {"date": sort}},
+        callback
+    );
 };
 
 var getPlayedMatches = function(callback, sort) {

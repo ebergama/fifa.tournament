@@ -36,15 +36,32 @@
             <span class="commentText">Eze AND Santi -> within the same team</span><br>
             <span class="commentText">Eze Santi Pasto PabloA -> within the match</span>
         </div>
+        <nav style="text-align: center">
+            <ul class="pagination">
+                <li>
+                    <a ng-click="add(-1)" href="#" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <li ng-class="{'active': page == activePage, 'hidden-xs': page != activePage && page+1 != activePage && page-1 != activePage}" ng-repeat="page in pages">
+                    <a href="/tournament/{{theTournament.name}}?page={{page}}&sort=desc">{{page}}</a>
+                </li>
+                <li>
+                    <a ng-click="add(1)" href="#" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
         <div class="table-responsive">
             <table class="table middleData text-center">
             <thead>
             <tr>
                 <th>
-                    <span class="pointer noselect" ng-click="sortReverse = !sortReverse">
+                    <span class="pointer noselect" ng-click="changeSortOrder()">
                         <span>Dia</span>
-                        <span ng-show="!sortReverse" class="fa fa-caret-down"></span>
-                        <span ng-show="sortReverse" class="fa fa-caret-up"></span>
+                        <span ng-show="sorting == 'desc'" class="fa fa-caret-down"></span>
+                        <span ng-show="sorting == 'asc'" class="fa fa-caret-up"></span>
                     </span>
 
                 </th>
@@ -61,7 +78,7 @@
                 <!--th>Tags</th-->
             </tr>
             </thead>
-                <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters | searchMatchFilter:searchMatch | orderBy:orderByDateFn:sortReverse)">
+                <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters | searchMatchFilter:searchMatch)">
 
                 <tr ng-class="match.clazz">
                     <td rowspan="2" class="col-md-1"> <!--Dia-->
@@ -116,7 +133,24 @@
                 </tr>
                 <tr ng-hide="filteredMatches.length"><td colspan="8">Nada por aqui!</td></tr>
                 </tbody>
-        </table>
+            </table>
+            <nav style="text-align: center">
+                <ul class="pagination">
+                    <li>
+                        <a ng-click="add(-1)" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li ng-class="{'active': page == activePage, 'hidden-xs': page != activePage && page+1 != activePage && page-1 != activePage}" ng-repeat="page in pages">
+                        <a href="/tournament/{{theTournament.name}}?page={{page}}&sort=desc">{{page}}</a>
+                    </li>
+                    <li>
+                        <a ng-click="add(1)" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
         <h4 ng-show="hasStandings(theTournament, thePhase)">Posiciones</h4>
         <div class="table-responsive">

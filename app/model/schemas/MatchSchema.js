@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 var Schema = mongoose.Schema;
 var _ = require("underscore");
 var __ = require("../../constants");
@@ -27,6 +28,8 @@ var matchSchema = new Schema({
     tournament: {type: Schema.Types.ObjectId, ref: "Tournament"},
     phase: {type: String, required: true}
 });
+
+matchSchema.plugin(mongoosePaginate);
 
 
 var Match = mongoose.model("Match", matchSchema);

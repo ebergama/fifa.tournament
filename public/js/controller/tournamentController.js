@@ -1,4 +1,12 @@
-controllers.controller('tournamentController', ['$scope', 'Data', "playersData", "matches", "tournament", "matchService", function($scope, Data, playersData, matches, tournament, matchService){
+controllers.controller('tournamentController', ['$scope', "$location", 'Data', "playersData", "matchInfos", "tournament", "matchService", function($scope, $location, Data, playersData, matchInfos, tournament, matchService){
+    var matches = matchInfos.docs;
+    $scope.pages = _.range(1, Math.ceil(matchInfos.total / matchInfos.limit) + 1);
+    $scope.limit = matchInfos.limit;
+    $scope.activePage = $location.search().page;
+    $scope.add = function(value) {
+        $scope.activePage = parseInt($scope.activePage) + value;
+        $location.search('page', $scope.activePage);
+    };
 
     var addTagFilter = function(tag) {
         if ($scope.tagFilters.indexOf(tag) == -1) {
@@ -149,13 +157,14 @@ controllers.controller('tournamentController', ['$scope', 'Data', "playersData",
             $scope.players.splice(index, 1);
         }
     };
-    
-    $scope.orderByDateFn = function(match) {
-        return match.date instanceof Date 
-			? match.date.toISOString() 
-			: match.date 
-				? match.date
-				: $scope.sortReverse ? "0": "z";
+
+    $scope.changeSortOrder = function() {
+        if ($scope.sorting == "asc") {
+            $scope.sorting = "desc";
+        } else {
+            $scope.sorting = "asc";
+        }
+        $location.search('sort', $scope.sorting);
     };
 
     $scope.generateRandomTeams = function() {
@@ -194,7 +203,7 @@ controllers.controller('tournamentController', ['$scope', 'Data', "playersData",
     if (tournament && tournament.config.defaultPhase) {
         selectPhase(tournament.config.defaultPhase);
     }
-    $scope.sortReverse = -1;
+    $scope.sorting = $location.search().sort;
     $(".navbar-collapse").collapse('hide');
 }])
     .filter('matchFilter', function() {

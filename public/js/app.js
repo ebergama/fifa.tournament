@@ -25,8 +25,9 @@ var app = angular.module('fifa', ['ngRoute', 'ui.bootstrap', 'fifaControllers', 
                         playersData: function(playerService) {
                             return playerService.getPlayers();
                         },
-                        matches:  function($route, matchService) {
-                            return matchService.getMatches($route.current.params.tournamentName);
+                        matchInfos:  function($route, matchService) {
+                            var params = $route.current.params;
+                            return matchService.getMatches(params.tournamentName, params.page, params.sort || 'desc');
                         },
                         tournament: function($route, tournamentService) {
                             return tournamentService.getTournament($route.current.params.tournamentName);
