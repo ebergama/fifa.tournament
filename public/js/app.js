@@ -74,7 +74,7 @@ var app = angular.module('fifa', ['ngRoute', 'ui.bootstrap', 'fifaControllers', 
                     templateUrl: 'templates/error'
                 }).
                 otherwise({
-                    redirectTo: '/tournament/Partidos por ranking'
+                    redirectTo: '/ranking'
                 });
             $locationProvider.html5Mode(true);
 }]);
