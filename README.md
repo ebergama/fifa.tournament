@@ -29,10 +29,16 @@ mongorestore --drop -d fifa prod.backup_<latest>/heroku_<hash>/
 Replace the <latest> tag by the actual latest backup filename
 
 ## Running
+
+### Startup mongo database
 ```Shell
-> mongod
-> npm install
-> node server.js
+mongod
+```
+
+### Run the app
+```bash
+npm install
+env ENV_FILE=./env.config node server.js
 ```
 
 ## Developer information
