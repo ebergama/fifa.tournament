@@ -18,7 +18,7 @@ var sendEmail = function(to, subject, body) {
         to: to,
         subject: subject,
         text: body,
-        bcc: 'ezequiel@medallia.com,santiago@medallia.com,nicolas@medallia.com'
+        bcc: process.env.ADMIN_EMAILS
     });
 };
 
