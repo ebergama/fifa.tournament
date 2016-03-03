@@ -4,6 +4,7 @@ var apiHandler = require("./ApiHandler");
 var email = require('../service/EmailService');
 var tournamentService = require("../service/TournamentService");
 var matchService = require("../service/MatchService");
+var hipchat = require("../service/HipChatService");
 
 module.exports = function(app) {
     app.post("/api/match", apiHandler.authenticateUser, function(req, res, next) {
@@ -17,6 +18,7 @@ module.exports = function(app) {
                     apiHandler.handleResponse(req, res, next, err, "created");
                     stats.updateForPlayer(match.getAllPlayers());
                     ranking.calculateGeneralRanking();
+                    hipchat.push(match, tournamentName, true);
                     email.sendMatchEmail(match, tournamentName, true);
                 });
             });
