@@ -98,7 +98,8 @@ angular.module("fifa").service("tournamentService", ["$http", function($http) {
 				{cssValue: "Gales", text:"Gales"},
 				{cssValue: "Australia", text:"Australia"},
 				{cssValue: "Korea", text:"Corea del sur"},
-                {cssValue: "SanLorenzo", text:"San Lorenzo"},
+                                {cssValue: "SanLorenzo", text:"San Lorenzo"},
+                                {cssValue: "Arsenal", text:"Arsenal"}
 			];
         }
         
