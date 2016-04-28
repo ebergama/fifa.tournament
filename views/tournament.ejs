@@ -16,43 +16,17 @@
         <div style="display: inline-block;" ng-repeat="player in players">
             <a  ng-click="removePlayerTag(player)" class="filterLabel label label-primary" href="#" role="button" > {{player}} X </a>
         </div>
-        <h3>{{thePhase}}</h3>
-        <h4>{{thePhase == 'Partidos' ? '' : 'Partidos'}}</h4>
+        <h3 ng-show="thePhase != 'Partidos'">{{thePhase}}</h3>
+        <h4 ng-show="thePhase != 'Partidos'">{{'Partidos'}}</h4>
 
-
-        <div class="input-group custom-search-form" style="margin-top: 1em; width: 100%">
-            <input type="text" class="form-control" placeholder="Search for a match..." ng-model="searchMatch" ng-model-options="{debounce: 500}">
-            <span class="input-group-btn">
-                <button class="btn btn-default " type="button">
-                    <i class="fa fa-search"></i>
-                </button>
-                <% if (user) { %>
-                <button ng-controller="modalController" type="button" class="btn btn-success" ng-click="open({'tournament': theTournament, 'phase': thePhase, 'away': {}, 'home': {}})">Cargar partido<i class=""></i></button>
-                <% } %>
-
-            </span>
+        <% if (user) { %>
+        <div class="text-right">
+            <button ng-controller="modalController" style="margin-bottom: 1em;"
+                    type="button" class="btn btn-success"
+                    ng-click="open({'tournament': theTournament, 'phase': thePhase, 'away': {}, 'home': {}})">Cargar partido<i class=""></i>
+            </button>
         </div>
-        <div style="margin-top: 0.5em; margin-bottom: 0.5em">
-            <span class="commentText">Eze AND Santi -> within the same team</span><br>
-            <span class="commentText">Eze Santi Pasto PabloA -> within the match</span>
-        </div>
-        <nav style="text-align: center">
-            <ul class="pagination">
-                <li>
-                    <a ng-click="add(-1)" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                    </a>
-                </li>
-                <li ng-class="{'active': page == activePage, 'hidden-xs': page != activePage && page+1 != activePage && page-1 != activePage}" ng-repeat="page in pages">
-                    <a href="/tournament/{{theTournament.name}}?page={{page}}&sort=desc">{{page}}</a>
-                </li>
-                <li>
-                    <a ng-click="add(1)" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <% } %>
         <div class="table-responsive">
             <table class="table middleData text-center">
             <thead>
@@ -141,7 +115,7 @@
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <li ng-class="{'active': page == activePage, 'hidden-xs': page != activePage && page+1 != activePage && page-1 != activePage}" ng-repeat="page in pages">
+                    <li ng-class="{'active': page == activePage, 'hidden': page != activePage && page - activePage > 2 || page - activePage < -2 }" ng-repeat="page in pages">
                         <a href="/tournament/{{theTournament.name}}?page={{page}}&sort=desc">{{page}}</a>
                     </li>
                     <li>

@@ -1,4 +1,4 @@
-controllers.controller('modalController', ["$scope", "$modal", "$log", "playerService", "teamService", function ($scope, $modal, $log, playerService, teamService) {
+controllers.controller('modalController', ["$scope", "$modal", "$log", "playerService", "teamService", "$route", function ($scope, $modal, $log, playerService, teamService, $route) {
 
     $scope.open = function (match) {
         
@@ -13,15 +13,8 @@ controllers.controller('modalController', ["$scope", "$modal", "$log", "playerSe
             }
         });
 
-        modalInstance.result.then(
-			function (updatedMatch) {
-				if (!match.home.player && !match.home.player) {
-					$scope.matches.push(match);
-				}
-				angular.copy(updatedMatch, match);
-            	$scope.calculateStandings();
-        }, function () {
-            	$log.info('Modal dismissed at: ' + new Date());
+        modalInstance.result.then(function() {
+            $route.reload();
         });
     };
     

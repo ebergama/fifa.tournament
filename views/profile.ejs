@@ -156,20 +156,20 @@
         <div ng-show="selectedTab === 'feeling'" class="profile-tab row">
             <div class="table-responsive">
                 <table class="table table-hover table-striped text-center middleData">
-					<tr ng-repeat="(partner, stats) in feeling">
-						<th class="col-md-2">
-							<img ng-if="partner != ''" class="img-circle img-circle-small" ng-src="{{getPicture(partner)}}">
-							<span>{{partner}}</span>
-						</th>
-						<td class="col-md-1" ng-if="partner != ''" ng-repeat="stat in stats">{{stat.value}}</td>
-						<th class="col-md-1" ng-if="partner == ''" ng-repeat="statName in stats">
-							<span class="pointer noselect" ng-click="onStatClick()">
-							<span>{{statName}}</span>
-							<span ng-show="!sortReverse && statCriteria == statName" class="fa fa-caret-down"></span>
-							<span ng-show="sortReverse && statCriteria == statName" class="fa fa-caret-up"></span>
-					</span>
-						</th>
-					</tr>
+                    <tr ng-repeat="(partner, stats) in feeling">
+                        <th class="col-md-2">
+                            <img ng-if="partner != ''" class="img-circle img-circle-small" ng-src="{{getPicture(partner)}}">
+                            <span>{{partner}}</span>
+                        </th>
+                        <td class="col-md-1" ng-if="partner != ''" ng-repeat="stat in stats | orderBy: value">{{stat.value}}</td>
+                        <th class="col-md-1" ng-if="partner == ''" ng-repeat="statName in stats">
+                            <span class="pointer noselect" ng-click="onStatClick()">
+                                <span>{{statName}}</span>
+                                <span ng-show="!sortReverse && statCriteria == statName" class="fa fa-caret-down"></span>
+                                <span ng-show="sortReverse && statCriteria == statName" class="fa fa-caret-up"></span>
+                            </span>
+                        </th>
+                    </tr>
                 </table>
             </div>
         </div>
