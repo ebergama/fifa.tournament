@@ -52,7 +52,7 @@
                 <!--th>Tags</th-->
             </tr>
             </thead>
-                <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters | searchMatchFilter:searchMatch)">
+                <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters)">
 
                 <tr ng-class="match.clazz">
                     <td rowspan="2" class="col-md-1"> <!--Dia-->
