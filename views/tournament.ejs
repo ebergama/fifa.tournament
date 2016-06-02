@@ -27,7 +27,37 @@
             </button>
         </div>
         <% } %>
-        <div class="table-responsive">
+
+        <div class="container-fluid">
+            <div class="row text-center">
+                <div class="col-md-5 col-sm-6" ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters)"
+                     style="border: 1px solid black; margin-top: 1em;     border-radius: 10px;">
+
+                    <div class="row">
+                        <div class="col-md-2 col-sm-2 team {{match.home.team}}"></div>
+                        <div class="col-md-3 col-sm-2">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">{{match.home.player}}</div>
+                                <div class="col-md-12 col-sm-12">{{match.home.partner}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-sm-1">{{match.home.goals}}</div>
+                        <!--<div class="col-md-1">-</div>-->
+                        <div class="col-md-1 col-sm-1">{{match.away.goals}}</div>
+                        <div class="col-md-3 col-sm-2">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">{{match.away.player}}</div>
+                                <div class="col-md-12 col-sm-12">{{match.away.partner}}</div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-sm-2 team {{match.away.team}}"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--<div class="table-responsive">
             <table class="table middleData text-center">
             <thead>
             <tr>
@@ -49,35 +79,35 @@
                 <th class="hidden-xs">Jugadores</th>
                 <th class="hidden-lg hidden-md hidden-sm">J</th>
 
-                <!--th>Tags</th-->
+                &lt;!&ndash;th>Tags</th&ndash;&gt;
             </tr>
             </thead>
                 <tbody ng-repeat="match in filteredMatches = (matches | matchFilter:players | tagFilter: tagFilters)">
 
                 <tr ng-class="match.clazz">
-                    <td rowspan="2" class="col-md-1"> <!--Dia-->
+                    <td rowspan="2" class="col-md-1"> &lt;!&ndash;Dia&ndash;&gt;
                         {{match.date | date:'dd-MM-yy'}}
                     </td>
-                    <td ng-class="match.home.clazz"> <!--Jugador-->
+                    <td ng-class="match.home.clazz"> &lt;!&ndash;Jugador&ndash;&gt;
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.home.player)}}" ng-click="addPlayerTag(match.home.player)">
                         <span class="hidden-xs">{{match.home.player}}</span>
                     </td>
-                    <td rowspan="2" ng-class="match.home.clazz" class="hidden-xs col-md-1"> <!--Equipo-->
+                    <td rowspan="2" ng-class="match.home.clazz" class="hidden-xs col-md-1"> &lt;!&ndash;Equipo&ndash;&gt;
                         <div class="team {{match.home.team}}"></div>
                     </td>
-                    <td rowspan="2" ng-class="match.home.clazz" class="matchGoals"> <!--Local-->
+                    <td rowspan="2" ng-class="match.home.clazz" class="matchGoals"> &lt;!&ndash;Local&ndash;&gt;
                         {{match.home.goals}}
                         <span ng-if="match.home.penalties">({{match.home.penalties}})</span>
                     </td>
-                    <td rowspan="2">vs</td> <!--vs-->
-                    <td rowspan="2" ng-class="match.away.clazz" class="matchGoals"> <!--Visitante-->
+                    <td rowspan="2">vs</td> &lt;!&ndash;vs&ndash;&gt;
+                    <td rowspan="2" ng-class="match.away.clazz" class="matchGoals"> &lt;!&ndash;Visitante&ndash;&gt;
                         {{match.away.goals}}
                         <span ng-if="match.away.penalties">({{match.away.penalties}})</span>
                     </td>
-                    <td rowspan="2" ng-class="match.away.clazz" class="hidden-xs col-md-1"> <!--Equipo-->
+                    <td rowspan="2" ng-class="match.away.clazz" class="hidden-xs col-md-1"> &lt;!&ndash;Equipo&ndash;&gt;
                         <div class="team {{match.away.team}}"></div>
                     </td>
-                    <td ng-class="match.away.clazz"> <!--Jugador-->
+                    <td ng-class="match.away.clazz"> &lt;!&ndash;Jugador&ndash;&gt;
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.away.player)}}" ng-click="addPlayerTag(match.away.player)">
                         <span class="hidden-xs">{{match.away.player}}</span>
                     </td>
@@ -96,11 +126,11 @@
 
                 </tr>
                 <tr ng-class="match.clazz">
-                    <td ng-class="match.home.clazz" ng-show="getPicture(match.home.partner)"> <!--Pareja-->
+                    <td ng-class="match.home.clazz" ng-show="getPicture(match.home.partner)"> &lt;!&ndash;Pareja&ndash;&gt;
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.home.partner)}}" ng-click="addPlayerTag(match.home.partner)">
                         <span class="hidden-xs">{{match.home.partner}}</span>
                     </td>
-                    <td ng-class="match.away.clazz" ng-show="getPicture(match.away.partner)">    <!--Pareja-->
+                    <td ng-class="match.away.clazz" ng-show="getPicture(match.away.partner)">    &lt;!&ndash;Pareja&ndash;&gt;
                         <img class="img-circle img-circle-small" ng-src="{{getPicture(match.away.partner)}}" ng-click="addPlayerTag(match.away.partner)"  >
                         <span class="hidden-xs">{{match.away.partner}}</span>
                     </td>
@@ -125,7 +155,7 @@
                     </li>
                 </ul>
             </nav>
-        </div>
+        </div>-->
         <h4 ng-show="hasStandings(theTournament, thePhase)">Posiciones</h4>
         <div class="table-responsive">
             <table class="table table-hover table-striped text-center middleData" ng-show="hasStandings(theTournament, thePhase)">
